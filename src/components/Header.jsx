@@ -75,7 +75,7 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transform group-hover:scale-110 transition-all duration-300">
                 <span className="text-white font-bold text-lg sm:text-xl">C</span>
               </div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold gradient-text">ChipsStore</h1>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold gradient-text">Crunchywavez</h1>
             </Link>
           </div>
 
