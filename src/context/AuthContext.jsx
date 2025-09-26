@@ -131,7 +131,7 @@ export const AuthProvider = ({ children }) => {
 
       // Admin login check
       if (email === "admin@chipsstore.com" && password === "admin123") {
-        const response = await fetch("http://localhost:5000/api/auth/admin/login", {
+        const response = await fetch("https://server-api-one-psi.vercel.app/api/auth/admin/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -159,7 +159,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Regular user login
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("https://server-api-one-psi.vercel.app/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -225,7 +225,7 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: "Phone is required" }
       }
 
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch("https://server-api-one-psi.vercel.app/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -272,7 +272,7 @@ export const AuthProvider = ({ children }) => {
       dispatch({ type: "SET_LOADING", payload: true })
       dispatch({ type: "CLEAR_ERROR" })
 
-      const response = await fetch("http://localhost:5000/api/auth/profile", {
+      const response = await fetch("https://server-api-one-psi.vercel.app/api/auth/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -299,7 +299,7 @@ export const AuthProvider = ({ children }) => {
 
   const toggleWishlist = async (productId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/wishlist/${productId}`, {
+      const response = await fetch(`https://server-api-one-psi.vercel.app/api/auth/wishlist/${productId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${state.token}`,

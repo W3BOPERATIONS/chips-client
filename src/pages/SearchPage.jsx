@@ -31,7 +31,7 @@ const SearchPage = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      let url = `http://localhost:5000/api/products?search=${encodeURIComponent(query)}&sort=${sortBy}`
+      let url = `https://server-api-one-psi.vercel.app/api/products?search=${encodeURIComponent(query)}&sort=${sortBy}`
 
       if (filters.category !== "all") url += `&category=${filters.category}`
       if (filters.minPrice) url += `&minPrice=${filters.minPrice}`

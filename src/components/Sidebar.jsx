@@ -15,7 +15,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/products/categories")
+      const response = await fetch("https://server-api-one-psi.vercel.app/api/products/categories")
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }

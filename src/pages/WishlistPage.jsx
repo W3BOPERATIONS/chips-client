@@ -29,7 +29,7 @@ const WishlistPage = () => {
       setLoading(true)
       setError(null)
 
-      const response = await fetch("http://localhost:5000/api/auth/wishlist", {
+      const response = await fetch("https://server-api-one-psi.vercel.app/api/auth/wishlist", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

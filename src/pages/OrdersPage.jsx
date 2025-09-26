@@ -27,7 +27,7 @@ const OrdersPage = () => {
     try {
       setLoading(true)
       if (user?.email) {
-        const response = await axios.get(`http://localhost:5000/api/orders/user/${user.email}`)
+        const response = await axios.get(`https://server-api-one-psi.vercel.app/api/orders/user/${user.email}`)
         setOrders(response.data)
       }
     } catch (error) {
@@ -62,7 +62,7 @@ const OrdersPage = () => {
     try {
       setCancellingOrder(orderId)
       const response = await axios.put(
-        `http://localhost:5000/api/orders/${orderId}/cancel`,
+        `https://server-api-one-psi.vercel.app/api/orders/${orderId}/cancel`,
         {},
         {
           headers: {

@@ -68,7 +68,7 @@ const ProfilePage = () => {
 
     setOrdersLoading(true)
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/user/${user.email}`)
+      const response = await fetch(`https://server-api-one-psi.vercel.app/api/orders/user/${user.email}`)
       if (response.ok) {
         const orders = await response.json()
         setRecentOrders(orders.slice(0, 3)) // Show only recent 3 orders
@@ -89,7 +89,7 @@ const ProfilePage = () => {
 
     setWishlistLoading(true)
     try {
-      const response = await fetch("http://localhost:5000/api/auth/wishlist", {
+      const response = await fetch("https://server-api-one-psi.vercel.app/api/auth/wishlist", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -111,7 +111,7 @@ const ProfilePage = () => {
 
   const cancelOrder = async (orderId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+      const response = await fetch(`https://server-api-one-psi.vercel.app/api/orders/${orderId}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

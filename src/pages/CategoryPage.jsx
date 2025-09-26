@@ -21,7 +21,7 @@ const CategoryPage = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      let url = `http://localhost:5000/api/products?category=${category}&sort=${sortBy}`
+      let url = `https://server-api-one-psi.vercel.app/api/products?category=${category}&sort=${sortBy}`
 
       if (priceRange.min) url += `&minPrice=${priceRange.min}`
       if (priceRange.max) url += `&maxPrice=${priceRange.max}`

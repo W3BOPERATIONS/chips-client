@@ -124,7 +124,7 @@ const CheckoutPage = () => {
     setLoading(true)
 
     try {
-      const response = await axios.post("http://localhost:5000/api/orders", orderDetails)
+      const response = await axios.post("https://server-api-one-psi.vercel.app/api/orders", orderDetails)
 
       setOrderId(response.data.orderId || response.data._id)
       setCompleteOrderData({

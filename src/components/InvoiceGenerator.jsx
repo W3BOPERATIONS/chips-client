@@ -562,7 +562,7 @@ const InvoiceGenerator = ({ orderData, onClose }) => {
 
   const emailInvoice = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderData.orderId}/send-email`, {
+      const response = await fetch(`https://server-api-one-psi.vercel.app/api/orders/${orderData.orderId}/send-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
