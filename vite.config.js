@@ -7,7 +7,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "https://server-api-one-psi.vercel.app/",
         changeOrigin: true,
       },
     },
@@ -16,3 +16,6 @@ export default defineConfig({
     outDir: "dist",
   },
 })
+
+
+
