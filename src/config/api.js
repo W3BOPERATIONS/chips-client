@@ -2,12 +2,22 @@
 // Automatically detects localhost vs production
 
 const getApiUrl = () => {
-  const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+  const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+  const envUrl =
+    typeof import.meta !== "undefined" &&
+    import.meta.env &&
+    import.meta.env.VITE_API_URL &&
+    String(import.meta.env.VITE_API_URL)
 
-  if (isLocalhost) {
-    return "http://localhost:5000"
+  if (envUrl && /^https?:\/\//.test(envUrl)) {
+    return envUrl
   }
 
+  if (isLocalhost) {
+    return envUrl || "http://localhost:5000"
+  }
+
+  // Default production API
   return "https://server-api-one-psi.vercel.app"
 }
 
@@ -22,6 +32,8 @@ export const buildApiUrl = (endpoint) => {
 console.log("[API Config] Running on:", window.location.hostname)
 console.log(
   "[API Config] Detected environment:",
-  window.location.hostname === "localhost" ? "Development (localhost)" : "Production",
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "Development (localhost)"
+    : "Production",
 )
 console.log("[API Config] API URL:", API_URL)

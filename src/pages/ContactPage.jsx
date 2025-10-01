@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import { buildApiUrl } from "../config/api"
 
 // Animation variants (same as AboutPage)
 const fadeInUp = {
@@ -70,7 +71,7 @@ const ContactPage = () => {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch("http://localhost:5000/api/contact", {
+      const response = await fetch(buildApiUrl("api/contact"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -415,9 +416,21 @@ const ContactPage = () => {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Business Hours</h3>
                 <div className="space-y-4">
                   {[
-                    { day: "Monday - Friday", time: "9:00 AM - 7:00 PM", open: true },
-                    { day: "Saturday", time: "10:00 AM - 6:00 PM", open: true },
-                    { day: "Sunday", time: "Closed", open: false },
+                    {
+                      day: "Monday - Friday",
+                      time: "9:00 AM - 7:00 PM",
+                      open: true,
+                    },
+                    {
+                      day: "Saturday",
+                      time: "10:00 AM - 6:00 PM",
+                      open: true,
+                    },
+                    {
+                      day: "Sunday",
+                      time: "Closed",
+                      open: false,
+                    },
                   ].map((schedule, index) => (
                     <motion.div
                       key={index}
@@ -438,10 +451,22 @@ const ContactPage = () => {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Quick Links</h3>
                 <div className="space-y-4">
                   {[
-                    { label: "Track Your Order", href: "/track-order" },
-                    { label: "Returns & Refunds", href: "/returns" },
-                    { label: "Shipping Information", href: "/shipping" },
-                    { label: "Bulk Orders", href: "/bulk-orders" },
+                    {
+                      label: "Track Your Order",
+                      href: "/track-order",
+                    },
+                    {
+                      label: "Returns & Refunds",
+                      href: "/returns",
+                    },
+                    {
+                      label: "Shipping Information",
+                      href: "/shipping",
+                    },
+                    {
+                      label: "Bulk Orders",
+                      href: "/bulk-orders",
+                    },
                   ].map((link, index) => (
                     <motion.div key={index} whileHover={{ x: 5 }} className="group">
                       <Link
