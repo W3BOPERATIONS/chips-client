@@ -136,8 +136,33 @@ const CheckoutPage = () => {
       setOrderPlaced(true)
       setShowSuccess(true)
       clearCart()
+
+      if (typeof response.data?.emailSent !== "undefined") {
+        if (response.data.emailSent) {
+          console.log("[v0] Order email sent successfully for order:", response.data.orderId || response.data._id)
+        } else {
+          console.warn(
+            "[v0] Order created but email failed to send; check server logs for PDF generation or SMTP issues.",
+          )
+          // Optional user-facing notice; keeping subtle as order was successful
+          toast.warn("Order placed! Email could not be sent right now, but your order is confirmed.", {
+            position: "top-right",
+          })
+        }
+      } else {
+        console.log("[v0] No emailSent flag in response; server may be on an older version.")
+      }
     } catch (error) {
-      console.error("Error placing order:", error)
+      if (error.response) {
+        console.error("[v0] Error placing order (server responded):", {
+          status: error.response.status,
+          data: error.response.data,
+        })
+      } else if (error.request) {
+        console.error("[v0] Error placing order (no response from server):", error.message)
+      } else {
+        console.error("[v0] Error placing order (request setup):", error.message)
+      }
       toast.error("Failed to place order. Please try again.", {
         position: "top-right",
         autoClose: 4000,
