@@ -6,6 +6,7 @@ import { useNavigate, Link } from "react-router-dom"
 import LoadingSpinner from "../components/LoadingSpinner"
 import axios from "axios"
 import { toast } from "react-toastify"
+import { buildApiUrl } from "../config/api"
 
 const OrdersPage = () => {
   const { user, isAuthenticated, token } = useAuth()
@@ -27,7 +28,7 @@ const OrdersPage = () => {
     try {
       setLoading(true)
       if (user?.email) {
-        const response = await axios.get(`https://server-api-one-psi.vercel.app/api/orders/user/${user.email}`)
+        const response = await axios.get(buildApiUrl(`api/orders/user/${user.email}`))
         setOrders(response.data)
       }
     } catch (error) {
@@ -62,7 +63,7 @@ const OrdersPage = () => {
     try {
       setCancellingOrder(orderId)
       const response = await axios.put(
-        `https://server-api-one-psi.vercel.app/api/orders/${orderId}/cancel`,
+        buildApiUrl(`api/orders/${orderId}/cancel`),
         {},
         {
           headers: {
@@ -148,16 +149,15 @@ const OrdersPage = () => {
             <div class="space-y-3">
               ${order.items
                 .map(
-                  (item) => `
-                <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-                  <img src="${item.imageURL || "/placeholder.svg"}" alt="${item.name}" class="w-12 h-12 object-cover rounded-lg">
-                  <div class="flex-1">
-                    <h4 class="font-medium">${item.name}</h4>
-                    <p class="text-sm text-gray-600">Quantity: ${item.quantity}</p>
-                  </div>
-                  <p class="font-semibold">₹${item.price}</p>
-                </div>
-              `,
+                  (item) =>
+                    `<div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                      <img src="${item.imageURL || "/placeholder.svg"}" alt="${item.name}" class="w-12 h-12 object-cover rounded-lg">
+                      <div class="flex-1">
+                        <h4 class="font-medium">${item.name}</h4>
+                        <p class="text-sm text-gray-600">Quantity: ${item.quantity}</p>
+                      </div>
+                      <p class="font-semibold">₹${item.price}</p>
+                    </div>`,
                 )
                 .join("")}
             </div>

@@ -6,6 +6,7 @@ import { useCart } from "../context/CartContext"
 import { useAuth } from "../context/AuthContext"
 import LoadingSpinner from "../components/LoadingSpinner"
 import { toast } from "react-toastify"
+import { buildApiUrl } from "../config/api"
 
 const ProductDetailsPage = () => {
   const { id } = useParams()
@@ -33,7 +34,7 @@ const ProductDetailsPage = () => {
   const fetchProduct = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`https://server-api-one-psi.vercel.app/api/products/${id}`)
+      const response = await fetch(buildApiUrl(`api/products/${id}`))
       if (!response.ok) {
         throw new Error("Product not found")
       }
@@ -49,7 +50,7 @@ const ProductDetailsPage = () => {
   const fetchReviews = async () => {
     try {
       setReviewsLoading(true)
-      const response = await fetch(`https://server-api-one-psi.vercel.app/api/reviews/product/${id}`)
+      const response = await fetch(buildApiUrl(`api/reviews/product/${id}`))
       if (response.ok) {
         const data = await response.json()
         setReviews(data)
@@ -81,7 +82,7 @@ const ProductDetailsPage = () => {
       const token = localStorage.getItem("authToken")
       console.log("[v0] Token from localStorage:", token ? "exists" : "missing")
 
-      const response = await fetch("https://server-api-one-psi.vercel.app/api/reviews", {
+      const response = await fetch(buildApiUrl("api/reviews"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

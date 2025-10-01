@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link } from "react-router-dom"
 import LoadingSpinner from "../components/LoadingSpinner"
 import { toast } from "react-toastify"
+import { buildApiUrl } from "../config/api"
 
 const ProfilePage = () => {
   const { user, isAuthenticated, updateProfile, logout, loading, token } = useAuth()
@@ -68,7 +69,7 @@ const ProfilePage = () => {
 
     setOrdersLoading(true)
     try {
-      const response = await fetch(`https://server-api-one-psi.vercel.app/api/orders/user/${user.email}`)
+      const response = await fetch(buildApiUrl(`api/orders/user/${user.email}`))
       if (response.ok) {
         const orders = await response.json()
         setRecentOrders(orders.slice(0, 3)) // Show only recent 3 orders
@@ -89,7 +90,7 @@ const ProfilePage = () => {
 
     setWishlistLoading(true)
     try {
-      const response = await fetch("https://server-api-one-psi.vercel.app/api/auth/wishlist", {
+      const response = await fetch(buildApiUrl("api/auth/wishlist"), {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -111,7 +112,7 @@ const ProfilePage = () => {
 
   const cancelOrder = async (orderId) => {
     try {
-      const response = await fetch(`https://server-api-one-psi.vercel.app/api/orders/${orderId}/status`, {
+      const response = await fetch(buildApiUrl(`api/orders/${orderId}/status`), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -554,7 +555,7 @@ const ProfilePage = () => {
                         <img
                           src={
                             item.imageURL ||
-                            `/placeholder.svg?height=64&width=64&query=${encodeURIComponent(item.name) || "/placeholder.svg"}`
+                            `/placeholder.svg?height=64&width=64&query=${encodeURIComponent(item.name) || "/placeholder.svg"}` // Adjusted placeholder URL
                           }
                           alt={item.name}
                           className="w-16 h-16 object-cover rounded-lg"

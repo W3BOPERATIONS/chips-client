@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import ProductCard from "../components/ProductCard"
 import LoadingSpinner from "../components/LoadingSpinner"
+import { buildApiUrl } from "../config/api"
 
 const CategoryPage = () => {
   const { category } = useParams()
@@ -21,7 +22,7 @@ const CategoryPage = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      let url = `https://server-api-one-psi.vercel.app/api/products?category=${category}&sort=${sortBy}`
+      let url = buildApiUrl(`api/products?category=${category}&sort=${sortBy}`)
 
       if (priceRange.min) url += `&minPrice=${priceRange.min}`
       if (priceRange.max) url += `&maxPrice=${priceRange.max}`

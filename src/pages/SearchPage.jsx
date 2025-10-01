@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import ProductCard from "../components/ProductCard"
 import LoadingSpinner from "../components/LoadingSpinner"
+import { buildApiUrl } from "../config/api"
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams()
@@ -31,7 +32,7 @@ const SearchPage = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      let url = `https://server-api-one-psi.vercel.app/api/products?search=${encodeURIComponent(query)}&sort=${sortBy}`
+      let url = buildApiUrl(`api/products?search=${encodeURIComponent(query)}&sort=${sortBy}`)
 
       if (filters.category !== "all") url += `&category=${filters.category}`
       if (filters.minPrice) url += `&minPrice=${filters.minPrice}`

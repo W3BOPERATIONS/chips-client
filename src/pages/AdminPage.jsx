@@ -9,6 +9,7 @@ import LoadingSpinner from "../components/LoadingSpinner"
 import ProductsList from "./ProductsList"
 import AdminOrdersList from "./AdminOrdersList"
 import { toast } from "react-toastify"
+import { buildApiUrl } from "../config/api"
 
 const AdminPage = () => {
   const { user, isAuthenticated, token, loading: authLoading } = useAuth()
@@ -58,13 +59,13 @@ const AdminPage = () => {
       console.log("[v0] Fetching admin data...")
 
       const [productsRes, ordersRes, statsRes] = await Promise.all([
-        axios.get("https://server-api-one-psi.vercel.app/api/admin/products", {
+        axios.get(buildApiUrl("api/admin/products"), {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get("https://server-api-one-psi.vercel.app/api/admin/orders", {
+        axios.get(buildApiUrl("api/admin/orders"), {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get("https://server-api-one-psi.vercel.app/api/admin/stats", {
+        axios.get(buildApiUrl("api/admin/stats"), {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ])
@@ -88,14 +89,9 @@ const AdminPage = () => {
   const handleProductSubmit = async (productData) => {
     try {
       if (editingProduct) {
-        // Update existing product
-        const response = await axios.put(
-          `https://server-api-one-psi.vercel.app/api/admin/products/${editingProduct._id}`,
-          productData,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        )
+        const response = await axios.put(buildApiUrl(`api/admin/products/${editingProduct._id}`), productData, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
 
         setProducts(products.map((p) => (p._id === editingProduct._id ? response.data : p)))
         setEditingProduct(null)
@@ -108,8 +104,7 @@ const AdminPage = () => {
           draggable: true,
         })
       } else {
-        // Add new product
-        const response = await axios.post("https://server-api-one-psi.vercel.app/api/admin/products", productData, {
+        const response = await axios.post(buildApiUrl("api/admin/products"), productData, {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -145,7 +140,7 @@ const AdminPage = () => {
     }
 
     try {
-      await axios.delete(`https://server-api-one-psi.vercel.app/api/admin/products/${productId}`, {
+      await axios.delete(buildApiUrl(`api/admin/products/${productId}`), {
         headers: { Authorization: `Bearer ${token}` },
       })
 
@@ -184,7 +179,7 @@ const AdminPage = () => {
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     try {
       const response = await axios.put(
-        `https://server-api-one-psi.vercel.app/api/orders/${orderId}/status`,
+        buildApiUrl(`api/orders/${orderId}/status`),
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -218,7 +213,7 @@ const AdminPage = () => {
     try {
       const product = products.find((p) => p._id === productId)
       const response = await axios.put(
-        `https://server-api-one-psi.vercel.app/api/admin/products/${productId}`,
+        buildApiUrl(`api/admin/products/${productId}`),
         { ...product, quantity: newQuantity, inStock: newQuantity > 0 },
         {
           headers: { Authorization: `Bearer ${token}` },

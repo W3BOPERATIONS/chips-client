@@ -2,6 +2,7 @@
 
 import html2pdf from "html2pdf.js"
 import { toast } from "react-toastify"
+import { buildApiUrl } from "../config/api"
 
 const InvoiceGenerator = ({ orderData, onClose }) => {
   const generateInvoice = () => {
@@ -562,7 +563,7 @@ const InvoiceGenerator = ({ orderData, onClose }) => {
 
   const emailInvoice = async () => {
     try {
-      const response = await fetch(`https://server-api-one-psi.vercel.app/api/orders/${orderData.orderId}/send-email`, {
+      const response = await fetch(buildApiUrl(`api/orders/${orderData.orderId}/send-email`), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

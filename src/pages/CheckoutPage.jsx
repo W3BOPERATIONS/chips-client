@@ -8,6 +8,7 @@ import { useAuth } from "../context/AuthContext"
 import SuccessModal from "../components/SuccessModal"
 import PaymentModal from "../components/PaymentModal"
 import { toast } from "react-toastify"
+import { buildApiUrl } from "../config/api"
 
 const CheckoutPage = () => {
   const navigate = useNavigate()
@@ -124,7 +125,7 @@ const CheckoutPage = () => {
     setLoading(true)
 
     try {
-      const response = await axios.post("https://server-api-one-psi.vercel.app/api/orders", orderDetails)
+      const response = await axios.post(buildApiUrl("api/orders"), orderDetails)
 
       setOrderId(response.data.orderId || response.data._id)
       setCompleteOrderData({

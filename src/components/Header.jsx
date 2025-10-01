@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useCart } from "../context/CartContext"
 import { useAuth } from "../context/AuthContext"
 import { useState, useEffect } from "react"
+import { buildApiUrl } from "../config/api"
 
 const Header = ({ onToggleSidebar, sidebarOpen }) => {
   const { getTotalItems } = useCart()
@@ -20,7 +21,7 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("https://server-api-one-psi.vercel.app/api/products/categories")
+      const response = await fetch(buildApiUrl("api/products/categories"))
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
