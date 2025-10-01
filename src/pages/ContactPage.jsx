@@ -464,7 +464,7 @@ const ContactPage = () => {
 
       {/* Enhanced FAQ Section with Accordion */}
       <div
-        className="relative py-24 min-h-[600px] flex items-center"
+        className="relative py-24 flex items-center"
         style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.90), rgba(255,255,255,0.94)), url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
           backgroundSize: "cover",
