@@ -392,7 +392,7 @@ const AboutPage = () => {
 
       {/* Contact CTA with Unique Background Image */}
       <div
-        className="relative py-20 flex items-center"
+        className="relative py-12 flex items-center"
         style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.92)), url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
           backgroundSize: "cover",
