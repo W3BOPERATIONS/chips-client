@@ -69,9 +69,14 @@ const ProductCard = ({ product }) => {
 
   const displayRating = product.rating || product.initialRating || 0
 
+  const isHamper = !!product.isHamper
+  const packCount = product.packetsPerHamper || 10
+  const packetWeight = product.packetWeightGrams || 30
+  const perPacketPrice = product.packetPrice || 20
+
   return (
-    <Link to={`/product/${product._id}`} className="group block">
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+    <Link to={`/product/${product._id}`} className="group block h-full">
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
         {/* Image Section */}
         <div className="relative overflow-hidden">
           <img
@@ -87,6 +92,9 @@ const ProductCard = ({ product }) => {
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
+            {isHamper && (
+              <span className="bg-indigo-600 text-white text-xs px-2 py-1 rounded-full shadow-md">Hamper</span>
+            )}
             {product.bestseller && (
               <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full shadow-md">Bestseller</span>
             )}
@@ -143,7 +151,7 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* Product Info */}
-        <div className="p-5 flex flex-col gap-3">
+        <div className="p-5 flex flex-col gap-3 flex-1">
           {/* Category & Rating */}
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium bg-gray-100 px-2 py-1 rounded-full capitalize">
@@ -160,8 +168,14 @@ const ProductCard = ({ product }) => {
           </h3>
           <p className="text-gray-600 text-sm line-clamp-2">{product.description}</p>
 
+          {isHamper && (
+            <div className="text-sm text-gray-700">
+              {packCount} x {packetWeight}g • ₹{perPacketPrice}/packet
+            </div>
+          )}
+
           {/* Price & Buttons */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 mt-auto">
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold text-indigo-600">₹{product.price}</span>
               {product.originalPrice && (

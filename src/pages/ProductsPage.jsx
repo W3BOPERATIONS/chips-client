@@ -229,11 +229,11 @@ const ProductsPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto auto-rows-fr items-stretch">
             {currentProducts.map((product, index) => (
               <div
                 key={product._id}
-                className="opacity-0 animate-[fadeInUp_0.6s_ease-out_forwards] max-w-sm mx-auto"
+                className="opacity-0 animate-[fadeInUp_0.6s_ease-out_forwards] h-full"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <ProductCard product={product} />

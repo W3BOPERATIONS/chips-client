@@ -95,29 +95,35 @@ const HomePage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
-            <Link to="/products?category=potato-chips" className="group">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 max-w-6xl mx-auto">
+            <Link to="/category/salty-hungama" className="group">
               <div className="glass-effect rounded-2xl p-6 text-center hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                <div className="text-4xl mb-3">🥔</div>
-                <h3 className="font-semibold text-slate-800 group-hover:text-indigo-600">Potato Chips</h3>
+                <div className="text-4xl mb-3">🧂</div>
+                <h3 className="font-semibold text-slate-800 group-hover:text-indigo-600">Salty Hungama</h3>
               </div>
             </Link>
-            <Link to="/products?category=veggie-chips" className="group">
+            <Link to="/category/tomato-chatpata" className="group">
               <div className="glass-effect rounded-2xl p-6 text-center hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                <div className="text-4xl mb-3">🥕</div>
-                <h3 className="font-semibold text-slate-800 group-hover:text-indigo-600">Veggie Chips</h3>
+                <div className="text-4xl mb-3">🍅</div>
+                <h3 className="font-semibold text-slate-800 group-hover:text-indigo-600">Tomato Chatpata</h3>
               </div>
             </Link>
-            <Link to="/products?category=protein-chips" className="group">
+            <Link to="/category/onion-tadka" className="group">
               <div className="glass-effect rounded-2xl p-6 text-center hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                <div className="text-4xl mb-3">💪</div>
-                <h3 className="font-semibold text-slate-800 group-hover:text-indigo-600">Protein Chips</h3>
+                <div className="text-4xl mb-3">🧅</div>
+                <h3 className="font-semibold text-slate-800 group-hover:text-indigo-600">Onion Tadka</h3>
               </div>
             </Link>
-            <Link to="/products?category=healthy-snacks" className="group">
+            <Link to="/category/desi-garlic" className="group">
               <div className="glass-effect rounded-2xl p-6 text-center hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                <div className="text-4xl mb-3">🌱</div>
-                <h3 className="font-semibold text-slate-800 group-hover:text-indigo-600">Healthy Snacks</h3>
+                <div className="text-4xl mb-3">🧄</div>
+                <h3 className="font-semibold text-slate-800 group-hover:text-indigo-600">Desi Garlic</h3>
+              </div>
+            </Link>
+            <Link to="/category/chilli-lemon" className="group">
+              <div className="glass-effect rounded-2xl p-6 text-center hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                <div className="text-4xl mb-3">🌶️</div>
+                <h3 className="font-semibold text-slate-800 group-hover:text-indigo-600">Chilli Lemon</h3>
               </div>
             </Link>
           </div>
@@ -141,11 +147,11 @@ const HomePage = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto auto-rows-fr items-stretch">
                 {products.slice(0, 6).map((product, index) => (
                   <div
                     key={product._id}
-                    className="opacity-0 animate-[fadeInUp_0.6s_ease-out_forwards] max-w-sm mx-auto"
+                    className="opacity-0 animate-[fadeInUp_0.6s_ease-out_forwards] h-full"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     <ProductCard product={product} />

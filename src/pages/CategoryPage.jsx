@@ -137,9 +137,11 @@ const CategoryPage = () => {
           <div className="flex justify-between items-center mb-6">
             <p className="text-gray-600">{products.length} products found</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 auto-rows-fr items-stretch">
             {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <div key={product._id} className="h-full">
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
         </>

@@ -171,12 +171,12 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json()
 
       if (!response.ok) {
-        if (response.status === 401) {
+        if (response.status === 400 || response.status === 401) {
           toast.error("Invalid email or password. Please check your credentials and try again.")
         } else if (response.status === 404) {
           toast.error("No account found with this email address. Please sign up first.")
         } else {
-          toast.error("Login failed. Please try again later.")
+          toast.error(data.message || "Login failed. Please try again later.")
         }
         throw new Error(data.message || "Login failed")
       }
