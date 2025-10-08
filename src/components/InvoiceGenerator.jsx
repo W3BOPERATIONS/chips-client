@@ -24,6 +24,7 @@ const InvoiceGenerator = ({ orderData, onClose }) => {
             background-color: #f8f9fa;
             color: #333;
             line-height: 1.6;
+            font-size: 14px;
           }
           .invoice-container {
             max-width: 800px;
@@ -168,6 +169,19 @@ const InvoiceGenerator = ({ orderData, onClose }) => {
             body { background-color: white; padding: 0; }
             .invoice-container { box-shadow: none; border: none; }
           }
+          @media (max-width: 640px) {
+            body { padding: 10px; font-size: 12px; }
+            .invoice-container { padding: 20px; }
+            .company-name { font-size: 24px; }
+            .invoice-title { font-size: 20px; }
+            .invoice-details { flex-direction: column; gap: 15px; }
+            .customer-details, .invoice-info { width: 100%; padding: 15px; }
+            .table th, .table td { padding: 10px 6px; font-size: 11px; }
+            .total-section { padding: 15px; }
+            .total-row { font-size: 18px; }
+            .footer h4 { font-size: 16px; }
+            .footer p { font-size: 11px; }
+          }
         </style>
       </head>
       <body>
@@ -231,7 +245,6 @@ const InvoiceGenerator = ({ orderData, onClose }) => {
 
           <div class="total-section">
             <p>Subtotal: <strong>₹${orderData.subtotal.toFixed(2)}</strong></p>
-            <p>Tax (8%): <strong>₹${orderData.tax.toFixed(2)}</strong></p>
             <p>Delivery: <strong style="color: #059669;">Free</strong></p>
             <p class="total-row">Total Amount: ₹${orderData.totalAmount.toFixed(2)}</p>
           </div>
@@ -283,6 +296,7 @@ const InvoiceGenerator = ({ orderData, onClose }) => {
               background-color: #ffffff;
               color: #333;
               line-height: 1.6;
+              font-size: 14px;
             }
             .invoice-container {
               max-width: 800px;
@@ -440,6 +454,19 @@ const InvoiceGenerator = ({ orderData, onClose }) => {
               body { padding: 0; }
               .invoice-container { border: none; box-shadow: none; }
             }
+            @media (max-width: 640px) {
+              body { padding: 10px; font-size: 12px; }
+              .invoice-container { padding: 20px; }
+              .company-name { font-size: 24px; }
+              .invoice-title { font-size: 20px; }
+              .invoice-details { flex-direction: column; gap: 15px; }
+              .customer-details, .invoice-info { width: 100%; padding: 15px; }
+              .table th, .table td { padding: 10px 6px; font-size: 11px; }
+              .total-section { padding: 15px; }
+              .total-row { font-size: 18px; }
+              .footer h4 { font-size: 16px; }
+              .footer p { font-size: 11px; }
+            }
           </style>
         </head>
         <body>
@@ -503,7 +530,6 @@ const InvoiceGenerator = ({ orderData, onClose }) => {
 
             <div class="total-section">
               <p>Subtotal: <strong>₹${orderData.subtotal.toFixed(2)}</strong></p>
-              <p>Tax (8%): <strong>₹${orderData.tax.toFixed(2)}</strong></p>
               <p>Delivery: <strong style="color: #059669;">Free</strong></p>
               <p class="total-row">Total Amount: ₹${orderData.totalAmount.toFixed(2)}</p>
             </div>
@@ -613,7 +639,7 @@ const InvoiceGenerator = ({ orderData, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl max-w-sm sm:max-w-md md:max-w-lg w-full p-5 sm:p-6 max-h-[80vh] overflow-y-auto no-scrollbar">
         <div className="text-center mb-6">
           <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -697,6 +723,11 @@ const InvoiceGenerator = ({ orderData, onClose }) => {
           </button>
         </div>
       </div>
+
+      <style>{`
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+      `}</style>
     </div>
   )
 }

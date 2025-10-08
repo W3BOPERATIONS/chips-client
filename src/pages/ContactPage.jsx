@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { buildApiUrl } from "../config/api"
+import ContactLink from "../components/ContactLink"
 
 // Animation variants (same as AboutPage)
 const fadeInUp = {
@@ -105,55 +106,116 @@ const ContactPage = () => {
     setOpenFaqIndex(openFaqIndex === index ? null : index)
   }
 
+  const mapAddress =
+    "SF-228 Samanvay Symphony, Vaikunth Crossing, Waghodia Main Road, Ankhol, Vadodara, Gujarat, India, 390019"
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapAddress)}`
+
   const contactInfo = [
     {
       icon: "📍",
       title: "Visit Us",
-      details: ["123 Snack Street", "Mumbai, Maharashtra 400001", "India"],
-      bgImage: "https://www.shutterstock.com/image-illustration/visit-us-map-pin-location-600nw-704724958.jpg",
+      details: [
+        <a
+          key="full-address"
+          href={mapUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="no-underline text-gray-700 hover:text-blue-600 transition-colors duration-300"
+        >
+          <span>SF-228 Samanvay Symphony, Vaikunth Crossing</span>
+          <br />
+          <span>Waghodia Main Road, Ankhol</span>
+          <br />
+          <span>Vadodara, Gujarat, India, 390019</span>
+        </a>,
+      ],
     },
     {
       icon: "📞",
       title: "Call Us",
-      details: ["+91 98765 43210", "+91 87654 32109", "Mon-Sat 9AM-7PM"],
-      bgImage: "https://i.pinimg.com/564x/c1/39/9a/c1399a01e6d764a7271da11dd6974778.jpg",
+      details: [
+        <ContactLink
+          key="phone1"
+          type="phone"
+          value="+91 94283 62005"
+          className="text-gray-800 hover:text-blue-600 font-medium no-underline transition-colors duration-300"
+        />,
+        <ContactLink
+          key="phone2"
+          type="phone"
+          value="+91 79843 31939"
+          className="text-gray-800 hover:text-blue-600 font-medium no-underline transition-colors duration-300"
+        />,
+        "Mon-Sat 9AM-7PM",
+      ],
     },
     {
       icon: "✉️",
       title: "Email Us",
-      details: ["hello@crunchywavez.com", "support@crunchywavez.com", "We reply within 24 hours"],
-      bgImage:
-        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      details: [
+        <ContactLink
+          key="email1"
+          type="email"
+          value="crunchywavez.contact@gmail.com"
+          className="text-gray-800 hover:text-blue-600 font-medium no-underline transition-colors duration-300"
+        />,
+        <ContactLink
+          key="email2"
+          type="email"
+          value="booking.crunchywavezz@gmail.com"
+          className="text-gray-800 hover:text-blue-600 font-medium no-underline transition-colors duration-300"
+        />,
+        "We reply within 24 hours",
+      ],
     },
   ]
 
   const faqs = [
     {
-      question: "What are your delivery timings?",
-      answer: "We deliver between 9 AM to 8 PM, Monday to Saturday. Sunday deliveries are available in select cities.",
-    },
-    {
-      question: "Do you deliver pan-India?",
-      answer: "Yes, we deliver to over 50 cities across India. Check our delivery page for the complete list.",
-    },
-    {
-      question: "What is your return policy?",
+      question: "What makes Crunchy Wavez different?",
       answer:
-        "We offer a 7-day return policy for unopened products. For quality issues, we provide immediate replacement or refund.",
+        "Our chips are sun-dried and roasted, not fried, crafted in small batches with authentic Indian seasonings for a light, healthy crunch.",
     },
     {
-      question: "Are your products fresh?",
-      answer: "We maintain strict quality control and most products are manufactured within 7 days of delivery.",
+      question: "Are these chips healthy?",
+      answer:
+        "Yes! Low in oil, preservative-free, and naturally flavorful, they're a guilt-free snack for modern lifestyles.",
+    },
+    {
+      question: "Who makes the chips?",
+      answer:
+        "Skilled rural women craft every batch, blending tradition with purpose and creating sustainable livelihoods.",
+    },
+    {
+      question: "What ingredients are used?",
+      answer: "We use 100% real potatoes, natural spices, and minimal oil — nothing artificial.",
+    },
+    {
+      question: "Suitable for all ages?",
+      answer: "Absolutely. Kids, adults, everyone can enjoy a wholesome, crunchy snack.",
+    },
+    {
+      question: "How should I store them?",
+      answer: "Keep in a cool, dry place and reseal after opening to maintain freshness.",
+    },
+    {
+      question: "Can I place bulk or custom orders?",
+      answer: "Yes! We offer bulk orders and custom packaging for events or gifting.",
+    },
+    {
+      question: "Are your practices sustainable?",
+      answer:
+        "Absolutely. From artisan production to women-led empowerment, we focus on ethical, responsible snacking.",
     },
   ]
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
-      {/* Enhanced Hero Section */}
+      {/* Enhanced Hero Section with Background Image */}
       <div
         className="relative text-white overflow-hidden min-h-[70vh] flex items-center"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1556760544-74068565f05c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1621447504864-d8686e12698c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
@@ -179,7 +241,7 @@ const ContactPage = () => {
       <div
         className="relative py-24 min-h-[600px] flex items-center"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.90)), url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.90)), url('https://images.unsplash.com/photo-1556760544-74068565f05c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
@@ -197,31 +259,23 @@ const ContactPage = () => {
             {contactInfo.map((info, index) => (
               <motion.div
                 key={index}
-                className="group relative h-80 rounded-3xl overflow-hidden shadow-2xl transform hover:scale-102 transition-all duration-500"
+                className="group relative rounded-3xl overflow-hidden bg-white border border-gray-200 shadow-xl transform hover:scale-[1.02] transition-all duration-500"
                 variants={fadeInUp}
                 whileHover={{ y: -8 }}
-                style={{
-                  backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(${info.bgImage})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
               >
-                <div className="absolute inset-0 flex flex-col justify-center items-center p-8 text-white text-center">
+                <div className="h-full flex flex-col justify-center items-center p-8 text-center relative z-10">
                   <div className="text-5xl mb-6 transform group-hover:scale-110 transition-transform duration-500">
                     {info.icon}
                   </div>
-                  <h3 className="text-2xl font-bold mb-6">{info.title}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">{info.title}</h3>
                   <div className="space-y-3">
                     {info.details.map((detail, idx) => (
-                      <p key={idx} className="text-gray-200 leading-relaxed">
+                      <p key={idx} className="text-gray-700 leading-relaxed">
                         {detail}
                       </p>
                     ))}
                   </div>
                 </div>
-
-                {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.div>
             ))}
           </motion.div>
@@ -239,9 +293,9 @@ const ContactPage = () => {
         }}
       >
         <div className="w-full max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Contact Form */}
-            <AnimatedSection className="bg-white rounded-3xl shadow-2xl p-8 border-2 border-gray-100">
+            <AnimatedSection className="bg-white rounded-3xl shadow-2xl p-8 border-2 border-gray-100 self-start">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Send us a Message</h2>
 
               {submitStatus === "success" && (
@@ -392,22 +446,30 @@ const ContactPage = () => {
             <div className="space-y-8">
               {/* Enhanced Map Placeholder */}
               <AnimatedSection className="bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-gray-100">
-                <div className="h-80 bg-gradient-to-br from-yellow-50 to-orange-100 flex items-center justify-center relative">
-                  <div className="text-center">
-                    <div className="text-5xl mb-4">🗺️</div>
-                    <p className="text-gray-700 text-lg font-semibold">Interactive Map</p>
-                    <p className="text-gray-600">123 Snack Street, Mumbai</p>
+                <div className="w-full h-80">
+                  <iframe
+                    title="Crunchywavez Location"
+                    src="https://www.google.com/maps?q=SF-228%20Samanvay%20Symphony,%20Vaikunth%20Crossing,%20Waghodia%20Main%20Road,%20Ankhol,%20Vadodara,%20Gujarat,%20India,%20390019&z=16&output=embed"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <div className="p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <div className="text-gray-700 font-semibold">
+                    SF-228 Samanvay Symphony, Vaikunth Crossing, Waghodia Main Road, Ankhol, Vadodara, Gujarat, 390019
                   </div>
-
-                  {/* Floating Location Pin */}
-                  <motion.div
-                    className="absolute bottom-8 right-8 bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-4 rounded-2xl shadow-2xl text-center"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ type: "spring", stiffness: 300 }}
+                  <a
+                    href="https://www.google.com/maps/dir/?api=1&destination=SF-228%20Samanvay%20Symphony,%20Vaikunth%20Crossing,%20Waghodia%20Main%20Road,%20Ankhol,%20Vadodara,%20Gujarat,%20India,%20390019"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline transition-colors duration-300"
                   >
-                    <div className="text-lg font-bold">Our Location</div>
-                    <div className="text-sm">Click to explore</div>
-                  </motion.div>
+                    Directions
+                  </a>
                 </div>
               </AnimatedSection>
 

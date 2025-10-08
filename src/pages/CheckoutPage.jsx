@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import axios from "axios"
 import { useCart } from "../context/CartContext"
 import { useAuth } from "../context/AuthContext"
@@ -12,12 +12,17 @@ import { buildApiUrl } from "../config/api"
 
 const CheckoutPage = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { items, getTotalPrice, clearCart } = useCart()
   const { user, isAuthenticated } = useAuth()
 
+  const directItems = Array.isArray(location.state?.directItems) ? location.state.directItems : []
+  const isDirect = directItems.length > 0
+  const itemsForOrder = isDirect ? directItems : items
+
   const [formData, setFormData] = useState({
     customerName: user?.name || "",
-    email: user?.email || "",
+    email: user?.email || "", // this remains the delivery/invoice email input
     address: "",
     phone: "",
     paymentMethod: "cod",
@@ -32,8 +37,7 @@ const CheckoutPage = () => {
   const [completeOrderData, setCompleteOrderData] = useState(null)
   const [orderPlaced, setOrderPlaced] = useState(false)
 
-  // Redirect if cart is empty and no order has been placed
-  if (items.length === 0 && !orderPlaced) {
+  if (itemsForOrder.length === 0 && !orderPlaced) {
     navigate("/")
     return null
   }
@@ -83,47 +87,43 @@ const CheckoutPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!validateForm()) return
 
-    if (!validateForm()) {
-      return
-    }
+    const subtotal = isDirect ? directItems.reduce((t, it) => t + it.price * it.quantity, 0) : getTotalPrice()
+    const total = subtotal
 
-    const subtotal = getTotalPrice()
-    const tax = subtotal * 0.08
-    const total = subtotal + tax
+    const normalizedItems = itemsForOrder.map((item) => ({
+      productId: item.productId || item._id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      imageURL: item.imageURL,
+    }))
 
     const orderDetails = {
       customerName: formData.customerName.trim(),
       email: formData.email.trim(),
+      userEmail: user?.email || formData.email.trim(),
       address: formData.address.trim(),
       phone: formData.phone.trim(),
       paymentMethod: formData.paymentMethod,
-      items: items.map((item) => ({
-        productId: item._id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        imageURL: item.imageURL,
-      })),
-      subtotal: subtotal,
-      tax: tax,
+      items: normalizedItems,
+      subtotal,
+      tax: 0,
       totalAmount: total,
       status: "pending",
     }
 
     setOrderData(orderDetails)
-
     if (formData.paymentMethod === "online") {
       setShowPayment(true)
     } else {
-      // Process COD order directly
       await processOrder(orderDetails)
     }
   }
 
   const processOrder = async (orderDetails) => {
     setLoading(true)
-
     try {
       const response = await axios.post(buildApiUrl("api/orders"), orderDetails)
 
@@ -135,7 +135,10 @@ const CheckoutPage = () => {
       })
       setOrderPlaced(true)
       setShowSuccess(true)
-      clearCart()
+
+      if (!isDirect) {
+        clearCart()
+      }
 
       if (typeof response.data?.emailSent !== "undefined") {
         if (response.data.emailSent) {
@@ -144,7 +147,6 @@ const CheckoutPage = () => {
           console.warn(
             "[v0] Order created but email failed to send; check server logs for PDF generation or SMTP issues.",
           )
-          // Optional user-facing notice; keeping subtle as order was successful
           toast.warn("Order placed! Email could not be sent right now, but your order is confirmed.", {
             position: "top-right",
           })
@@ -193,12 +195,11 @@ const CheckoutPage = () => {
 
   const handleSuccessClose = () => {
     setShowSuccess(false)
-    navigate("/orders")
+    navigate("/orders", { replace: true })
   }
 
-  const subtotal = getTotalPrice()
-  const tax = subtotal * 0.08
-  const total = subtotal + tax
+  const subtotal = isDirect ? directItems.reduce((t, it) => t + it.price * it.quantity, 0) : getTotalPrice()
+  const total = subtotal
 
   return (
     <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 page-transition">
@@ -397,9 +398,9 @@ const CheckoutPage = () => {
 
           {/* Order Items */}
           <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
-            {items.map((item, index) => (
+            {itemsForOrder.map((item, index) => (
               <div
-                key={item._id}
+                key={(item.productId || item._id) + index}
                 className="flex items-center space-x-3 sm:space-x-4 opacity-0 animate-[fadeInUp_0.6s_ease-out_forwards]"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
@@ -429,11 +430,6 @@ const CheckoutPage = () => {
             <div className="flex justify-between text-slate-600 text-sm sm:text-base">
               <span>Delivery</span>
               <span className="text-green-600 font-semibold">Free</span>
-            </div>
-
-            <div className="flex justify-between text-slate-600 text-sm sm:text-base">
-              <span>Tax (8%)</span>
-              <span className="font-semibold">₹{tax.toFixed(2)}</span>
             </div>
 
             <div className="border-t border-slate-200 pt-3 sm:pt-4">

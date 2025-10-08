@@ -39,10 +39,6 @@ const ProductDetailsPage = () => {
   const [hamperQty, setHamperQty] = useState(initialHamperQuantities)
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false)
 
-  // New state for scroll behavior
-  const [isSticky, setIsSticky] = useState(false)
-  const contentRef = useRef(null)
-
   // Star rating distribution state
   const [starDistribution, setStarDistribution] = useState({ 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 })
 
@@ -51,23 +47,11 @@ const ProductDetailsPage = () => {
     fetchReviews()
   }, [id])
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (contentRef.current) {
-        const contentTop = contentRef.current.getBoundingClientRect().top
-        setIsSticky(contentTop <= 100)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
   // Calculate star distribution when reviews change
   useEffect(() => {
     if (reviews.length > 0) {
       const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
-      reviews.forEach(review => {
+      reviews.forEach((review) => {
         if (review.rating >= 1 && review.rating <= 5) {
           distribution[review.rating]++
         }
@@ -226,11 +210,17 @@ const ProductDetailsPage = () => {
       navigate("/login")
       return
     }
-    const success = addToCart(product)
-    if (success) {
-      updateQuantity(product._id, Math.min(product.stock || quantity, quantity))
-      navigate("/checkout")
-    }
+    const qty = Math.min(product.stock || quantity, quantity)
+    const directItems = [
+      {
+        productId: product._id,
+        name: product.name,
+        price: product.price,
+        quantity: qty,
+        imageURL: product.imageURL,
+      },
+    ]
+    navigate("/checkout", { state: { directItems, fromBuyNow: true } })
   }
 
   const handleWishlistToggle = () => {
@@ -260,17 +250,15 @@ const ProductDetailsPage = () => {
   const customHamperPrice = (product?.packetPrice ?? 20) * totalSelectedPackets
 
   const updateHamperCount = (flavor, delta) => {
-    const maxPackets = product?.packetsPerHamper ?? 10
     const next = { ...hamperQty }
-    next[flavor] = Math.max(0, (next[flavor] || 0) + delta)
-    const nextTotal = Object.values(next).reduce((s, v) => s + v, 0)
-    // prevent exceeding total allowed packets
-    if (nextTotal <= maxPackets) setHamperQty(next)
+    next[flavor] = Math.max(0, Number(next[flavor] || 0) + delta)
+    const nextTotal = Object.values(next).reduce((s, v) => s + Number(v || 0), 0)
+    if (nextTotal < minPackets) return
+    setHamperQty(next)
   }
 
   const handleAddCustomHamper = () => {
     if (!isAuthenticated) {
-      // same toast as addToCart
       toast.info("Please sign in to add items to your cart", {
         position: "top-right",
         autoClose: 3000,
@@ -289,13 +277,12 @@ const ProductDetailsPage = () => {
       .map(([flavor, count]) => ({ flavor, count }))
 
     const customProduct = {
-      _id: `custom-${product._id}-${Date.now()}`, // unique per build
+      // A synthetic id just for the order payload
+      _id: `custom-${product._id}-${Date.now()}`,
       name: `${product.name} - Custom Hamper`,
       price: customHamperPrice,
       imageURL: product.imageURL,
       description: `Custom assortment of ${totalSelectedPackets} packets`,
-      quantity: 9999,
-      inStock: true,
       category: "custom-hamper",
       isHamper: true,
       packetsPerHamper: totalSelectedPackets,
@@ -304,17 +291,19 @@ const ProductDetailsPage = () => {
       contents,
     }
 
-    const success = addToCart(customProduct)
-    if (success) {
-      // single hamper item with precomputed price
-      updateQuantity(customProduct._id, 1)
-      toast.success("Custom hamper added! Proceeding to checkout…", {
-        position: "top-right",
-        autoClose: 1500,
-      })
-      setIsCustomizeOpen(false)
-      navigate("/checkout")
-    }
+    const directItems = [
+      {
+        productId: customProduct._id,
+        name: customProduct.name,
+        price: customProduct.price,
+        quantity: 1,
+        imageURL: customProduct.imageURL,
+      },
+    ]
+
+    toast.success("Custom hamper ready! Proceeding to checkout…", { position: "top-right", autoClose: 1500 })
+    setIsCustomizeOpen(false)
+    navigate("/checkout", { state: { directItems, fromBuyNow: true } })
   }
 
   if (loading) return <LoadingSpinner />
@@ -357,111 +346,115 @@ const ProductDetailsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="container mx-auto px-4 py-8">
-        {/* Breadcrumb */}
-        <nav className="text-sm text-gray-600 mb-6">
-          <span onClick={() => navigate("/")} className="cursor-pointer hover:text-orange-500 transition-colors">
-            Home
-          </span>
-          <span className="mx-2">›</span>
-          <span
-            onClick={() => navigate(`/category/${product.category}`)}
-            className="cursor-pointer hover:text-orange-500 transition-colors capitalize"
-          >
-            {product.category}
-          </span>
-          <span className="mx-2">›</span>
-          <span className="text-gray-900 font-medium">{product.name}</span>
-        </nav>
-
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
-          {/* Product Images - Fixed Position */}
-          <div className={`space-y-4 ${isSticky ? 'xl:sticky xl:top-20 xl:self-start' : ''}`}>
-            <div
-              ref={imageContainerRef}
-              className="relative aspect-square bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg overflow-hidden border border-gray-200 group"
-              onMouseEnter={() => setZoomActive(true)}
-              onMouseLeave={() => setZoomActive(false)}
-              onMouseMove={handleMouseMove}
-            >
-              <img
-                src={images[selectedImage] || "/placeholder.svg"}
-                alt={product.name}
-                className={`w-full h-full object-cover transition-transform duration-500 ease-out ${zoomActive ? "scale-110" : "scale-100"}`}
-                draggable={false}
-              />
+          {/* Left Section - Fixed Position */}
+          <div className="space-y-6 xl:sticky xl:top-8 xl:self-start xl:h-fit">
+            {/* Breadcrumb - Fixed at top */}
+            <nav className="text-sm text-gray-600 bg-white rounded-2xl shadow-lg p-4 border border-gray-100">
+              <span onClick={() => navigate("/")} className="cursor-pointer hover:text-orange-500 transition-colors">
+                Home
+              </span>
+              <span className="mx-2">›</span>
+              <span
+                onClick={() => navigate(`/category/${product.category}`)}
+                className="cursor-pointer hover:text-orange-500 transition-colors capitalize"
+              >
+                {product.category}
+              </span>
+              <span className="mx-2">›</span>
+              <span className="text-gray-900 font-medium">{product.name}</span>
+            </nav>
 
-              {/* Flipkart-style Magnifier */}
-              {zoomActive && images[selectedImage] && (
-                <div className="hidden xl:block absolute top-0 left-full ml-6 w-[400px] h-[400px] bg-white rounded-2xl shadow-xl overflow-hidden z-50 border border-gray-300">
-                  <div
-                    className="w-full h-full bg-no-repeat"
-                    style={{
-                      backgroundImage: `url(${images[selectedImage]})`,
-                      backgroundSize: `${zoomLevel * 100}%`,
-                      backgroundPosition: `${zoomPos.xPct}% ${zoomPos.yPct}%`,
-                    }}
-                  />
+            {/* Product Images */}
+            <div className="space-y-4">
+              <div
+                ref={imageContainerRef}
+                className="relative aspect-square max-w-[420px] xl:max-w-[460px] mx-auto bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg overflow-hidden border border-gray-200 group"
+                onMouseEnter={() => setZoomActive(true)}
+                onMouseLeave={() => setZoomActive(false)}
+                onMouseMove={handleMouseMove}
+              >
+                <img
+                  src={images[selectedImage] || "/placeholder.svg"}
+                  alt={product.name}
+                  className={`w-full h-full object-cover transition-transform duration-500 ease-out ${zoomActive ? "scale-110" : "scale-100"}`}
+                  draggable={false}
+                />
+
+                {/* Flipkart-style Magnifier */}
+                {zoomActive && images[selectedImage] && (
+                  <div className="hidden xl:block absolute top-0 left-full ml-6 w-[400px] h-[400px] bg-white rounded-2xl shadow-xl overflow-hidden z-50 border border-gray-300">
+                    <div
+                      className="w-full h-full bg-no-repeat"
+                      style={{
+                        backgroundImage: `url(${images[selectedImage]})`,
+                        backgroundSize: `${zoomLevel * 100}%`,
+                        backgroundPosition: `${zoomPos.xPct}% ${zoomPos.yPct}%`,
+                      }}
+                    />
+                  </div>
+                )}
+
+                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                  {product.bestseller && (
+                    <span className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg backdrop-blur-sm">
+                      🔥 Bestseller
+                    </span>
+                  )}
+                  {product.featured && (
+                    <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg backdrop-blur-sm">
+                      ⭐ Featured
+                    </span>
+                  )}
+                  {discount > 0 && (
+                    <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg backdrop-blur-sm">
+                      {discount}% OFF
+                    </span>
+                  )}
+                </div>
+
+                <button
+                  onClick={handleWishlistToggle}
+                  className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg flex items-center justify-center hover:scale-110 transition-all duration-300"
+                  aria-label="Add to wishlist"
+                >
+                  <span
+                    className={`text-xl transition-all duration-300 ${isWishlisted ? "text-red-500 scale-110" : "text-gray-400 hover:text-red-400"}`}
+                  >
+                    {isWishlisted ? "❤️" : "🤍"}
+                  </span>
+                </button>
+
+                {/* Removed "Hover to zoom" text */}
+              </div>
+
+              {images.length > 1 && (
+                <div className="flex space-x-3 overflow-x-auto pb-2 scrollbar-hide">
+                  {images.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(index)}
+                      className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300 transform hover:scale-105 ${
+                        selectedImage === index
+                          ? "border-orange-500 shadow-lg ring-2 ring-orange-200/50"
+                          : "border-gray-200 hover:border-gray-400"
+                      }`}
+                    >
+                      <img
+                        src={image || "/placeholder.svg"}
+                        alt={`${product.name} ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
                 </div>
               )}
-
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
-                {product.bestseller && (
-                  <span className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg backdrop-blur-sm">
-                    🔥 Bestseller
-                  </span>
-                )}
-                {product.featured && (
-                  <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg backdrop-blur-sm">
-                    ⭐ Featured
-                  </span>
-                )}
-                {discount > 0 && (
-                  <span className="bg-gradient-to-r from-green-500 to-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg backdrop-blur-sm">
-                    {discount}% OFF
-                  </span>
-                )}
-              </div>
-
-              <button
-                onClick={handleWishlistToggle}
-                className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg flex items-center justify-center hover:scale-110 transition-all duration-300"
-                aria-label="Add to wishlist"
-              >
-                <span className={`text-xl transition-all duration-300 ${isWishlisted ? "text-red-500 scale-110" : "text-gray-400 hover:text-red-400"}`}>
-                  {isWishlisted ? "❤️" : "🤍"}
-                </span>
-              </button>
-
-              <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300">
-                Hover to zoom
-              </div>
             </div>
-
-            {images.length > 1 && (
-              <div className="flex space-x-3 overflow-x-auto pb-2 scrollbar-hide">
-                {images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300 transform hover:scale-105 ${
-                      selectedImage === index
-                        ? "border-orange-500 shadow-lg ring-2 ring-orange-200/50"
-                        : "border-gray-200 hover:border-gray-400"
-                    }`}
-                  >
-                    <img
-                      src={image || "/placeholder.svg"}
-                      alt={`${product.name} ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
 
-          {/* Product Info - Scrollable */}
-          <div ref={contentRef} className="space-y-6">
+          {/* Right Section - Scrollable Content */}
+          <div className="space-y-6">
+            {/* Product Info Card */}
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
               <div className="space-y-4">
                 <div>
@@ -470,9 +463,7 @@ const ProductDetailsPage = () => {
                       {product.category}
                     </span>
                   </div>
-                  <h1 className="text-2xl font-bold text-gray-900 mb-3 leading-tight">
-                    {product.name}
-                  </h1>
+                  <h1 className="text-2xl font-bold text-gray-900 mb-3 leading-tight">{product.name}</h1>
                   <div className="flex items-center space-x-3 mb-4">
                     <div className="flex items-center bg-gradient-to-r from-green-50 to-emerald-50 px-3 py-2 rounded-xl shadow-md border border-green-200">
                       <StarRating rating={product.rating || product.initialRating || 0} size="w-5 h-5" />
@@ -498,7 +489,9 @@ const ProductDetailsPage = () => {
                       </>
                     )}
                   </div>
-                  <p className="text-sm text-gray-600 font-medium">Inclusive of all taxes • Free shipping on orders above ₹499</p>
+                  <p className="text-sm text-gray-600 font-medium">
+                    Inclusive of all taxes • Free shipping on orders above ₹499
+                  </p>
                 </div>
 
                 <div className="flex items-center space-x-4 bg-gray-50 rounded-xl p-4">
@@ -543,7 +536,15 @@ const ProductDetailsPage = () => {
                   {isHamper && (
                     <button
                       type="button"
-                      onClick={() => setIsCustomizeOpen(true)}
+                      onClick={() => {
+                        if (totalSelectedPackets < minPackets) {
+                          const first = (hamperFlavors && hamperFlavors[0]) || "Assorted"
+                          const deficit = minPackets - totalSelectedPackets
+                          const next = { ...hamperQty, [first]: (hamperQty[first] || 0) + deficit }
+                          setHamperQty(next)
+                        }
+                        setIsCustomizeOpen(true)
+                      }}
                       className="group bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-xl font-bold text-base hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
                       aria-label="Customize your hamper"
                     >
@@ -598,7 +599,7 @@ const ProductDetailsPage = () => {
                         : "text-gray-600 hover:text-gray-900 hover:bg-white hover:shadow-md"
                     }`}
                   >
-                    {tab === "inside" ? "What's Inside" : tab.charAt(0).toUpperCase() + tab.slice(1)} 
+                    {tab === "inside" ? "What's Inside" : tab.charAt(0).toUpperCase() + tab.slice(1)}
                     {tab === "reviews" && ` (${reviews.length})`}
                   </button>
                 ))}
@@ -612,7 +613,8 @@ const ProductDetailsPage = () => {
                       <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-4 border border-orange-200">
                         <div className="font-bold text-gray-900 text-base mb-1">🎁 Hamper Details</div>
                         <p className="text-gray-700 text-sm">
-                          Includes {packCount} premium packets × {packetWeight}g each. Perfect for gifting, parties, or group snacking experiences.
+                          Includes {packCount} premium packets × {packetWeight}g each. Perfect for gifting, parties, or
+                          group snacking experiences.
                         </p>
                       </div>
                     )}
@@ -635,7 +637,10 @@ const ProductDetailsPage = () => {
                   <div className="space-y-3">
                     {Array.isArray(product.contents) && product.contents.length > 0 ? (
                       product.contents.map((item, idx) => (
-                        <div key={idx} className="flex justify-between items-center bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300">
+                        <div
+                          key={idx}
+                          className="flex justify-between items-center bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300"
+                        >
                           <span className="font-bold text-gray-900 text-base">{item.flavor}</span>
                           <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold px-3 py-1 rounded-xl text-sm">
                             {item.count} packet{item.count > 1 ? "s" : ""}
@@ -644,7 +649,8 @@ const ProductDetailsPage = () => {
                       ))
                     ) : (
                       <div className="text-center py-6 text-gray-600 text-base">
-                        This premium hamper includes {packCount} carefully selected assorted packets for the perfect snacking experience.
+                        This premium hamper includes {packCount} carefully selected assorted packets for the perfect
+                        snacking experience.
                       </div>
                     )}
                   </div>
@@ -653,13 +659,38 @@ const ProductDetailsPage = () => {
                 {activeTab === "nutrition" && (
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                      { label: "Calories", value: product.nutritionInfo?.calories || 150, color: "from-orange-500 to-red-500", unit: "" },
-                      { label: "Protein", value: product.nutritionInfo?.protein || "2g", color: "from-blue-500 to-cyan-500", unit: "" },
-                      { label: "Carbs", value: product.nutritionInfo?.carbs || "15g", color: "from-green-500 to-emerald-500", unit: "" },
-                      { label: "Fat", value: product.nutritionInfo?.fat || "10g", color: "from-purple-500 to-pink-500", unit: "" },
+                      {
+                        label: "Calories",
+                        value: product.nutritionInfo?.calories || 150,
+                        color: "from-orange-500 to-red-500",
+                        unit: "",
+                      },
+                      {
+                        label: "Protein",
+                        value: product.nutritionInfo?.protein || "2g",
+                        color: "from-blue-500 to-cyan-500",
+                        unit: "",
+                      },
+                      {
+                        label: "Carbs",
+                        value: product.nutritionInfo?.carbs || "15g",
+                        color: "from-green-500 to-emerald-500",
+                        unit: "",
+                      },
+                      {
+                        label: "Fat",
+                        value: product.nutritionInfo?.fat || "10g",
+                        color: "from-purple-500 to-pink-500",
+                        unit: "",
+                      },
                     ].map((item, index) => (
-                      <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-4 border border-gray-200 text-center hover:shadow-md transition-all duration-300">
-                        <div className={`text-xl font-black bg-gradient-to-r ${item.color} bg-clip-text text-transparent mb-1`}>
+                      <div
+                        key={index}
+                        className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-4 border border-gray-200 text-center hover:shadow-md transition-all duration-300"
+                      >
+                        <div
+                          className={`text-xl font-black bg-gradient-to-r ${item.color} bg-clip-text text-transparent mb-1`}
+                        >
                           {item.value}
                         </div>
                         <div className="text-gray-600 font-semibold text-sm">{item.label}</div>
@@ -671,12 +702,27 @@ const ProductDetailsPage = () => {
                 {activeTab === "details" && (
                   <div className="space-y-4">
                     {[
-                      { label: "Brand", value: product.brand },
-                      { label: "Weight", value: product.weight },
-                      { label: "Category", value: product.category },
-                      { label: "Ingredients", value: product.ingredients },
+                      {
+                        label: "Brand",
+                        value: product.brand,
+                      },
+                      {
+                        label: "Weight",
+                        value: product.weight,
+                      },
+                      {
+                        label: "Category",
+                        value: product.category,
+                      },
+                      {
+                        label: "Ingredients",
+                        value: product.ingredients,
+                      },
                     ].map((detail, index) => (
-                      <div key={index} className="flex justify-between items-start py-3 border-b border-gray-200 last:border-b-0">
+                      <div
+                        key={index}
+                        className="flex justify-between items-start py-3 border-b border-gray-200 last:border-b-0"
+                      >
                         <span className="font-bold text-gray-900 text-base">{detail.label}:</span>
                         <span className="text-gray-700 text-base text-right max-w-md">{detail.value}</span>
                       </div>
@@ -699,7 +745,7 @@ const ProductDetailsPage = () => {
                                 <div className="flex items-center space-x-2 flex-1">
                                   <span className="text-sm font-medium text-gray-600 w-6">{star}★</span>
                                   <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                    <div 
+                                    <div
                                       className="bg-gradient-to-r from-yellow-400 to-yellow-500 h-2 rounded-full transition-all duration-500"
                                       style={{ width: `${percentage}%` }}
                                     ></div>
@@ -727,7 +773,10 @@ const ProductDetailsPage = () => {
                     )}
 
                     {showReviewForm && (
-                      <form onSubmit={handleSubmitReview} className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-4 border border-gray-200 space-y-4 shadow-md">
+                      <form
+                        onSubmit={handleSubmitReview}
+                        className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-4 border border-gray-200 space-y-4 shadow-md"
+                      >
                         <div>
                           <label className="block text-base font-bold text-gray-900 mb-2">Your Rating</label>
                           <div className="flex space-x-1">
@@ -737,7 +786,9 @@ const ProductDetailsPage = () => {
                                 type="button"
                                 onClick={() => setReviewForm({ ...reviewForm, rating: star })}
                                 className={`text-2xl transition-all duration-300 transform hover:scale-110 ${
-                                  star <= reviewForm.rating ? "text-yellow-400 scale-105" : "text-gray-300 hover:text-yellow-300"
+                                  star <= reviewForm.rating
+                                    ? "text-yellow-400 scale-105"
+                                    : "text-gray-300 hover:text-yellow-300"
                                 }`}
                               >
                                 ★
@@ -773,13 +824,18 @@ const ProductDetailsPage = () => {
                     ) : reviews.length > 0 ? (
                       <div className="space-y-4">
                         {reviews.map((review) => (
-                          <div key={review._id} className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-4 border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300">
+                          <div
+                            key={review._id}
+                            className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-4 border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300"
+                          >
                             <div className="flex items-start justify-between mb-3">
                               <div>
                                 <div className="font-bold text-gray-900 text-base mb-1">{review.user.name}</div>
                                 <div className="flex items-center space-x-2">
                                   <StarRating rating={review.rating} size="w-4 h-4" />
-                                  <span className="text-gray-500 text-sm">{new Date(review.createdAt).toLocaleDateString()}</span>
+                                  <span className="text-gray-500 text-sm">
+                                    {new Date(review.createdAt).toLocaleDateString()}
+                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -790,7 +846,9 @@ const ProductDetailsPage = () => {
                     ) : (
                       <div className="text-center py-6 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200">
                         <div className="text-4xl mb-3">💬</div>
-                        <div className="text-gray-600 text-base font-medium">No reviews yet. Be the first to share your experience!</div>
+                        <div className="text-gray-600 text-base font-medium">
+                          No reviews yet. Be the first to share your experience!
+                        </div>
                       </div>
                     )}
                   </div>

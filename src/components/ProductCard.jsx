@@ -38,10 +38,18 @@ const ProductCard = ({ product }) => {
       navigate("/buy")
       return
     }
-    const success = addToCart(product)
-    if (success) {
-      navigate("/checkout")
-    }
+
+    const directItems = [
+      {
+        productId: product._id,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        imageURL: product.imageURL,
+      },
+    ]
+
+    navigate("/checkout", { state: { directItems, fromBuyNow: true } })
   }
 
   const handleWishlistToggle = async (e) => {
@@ -86,25 +94,6 @@ const ProductCard = ({ product }) => {
           />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
-            {isHamper && (
-              <span className="bg-indigo-600 text-white text-xs px-2 py-1 rounded-full shadow-md">Hamper</span>
-            )}
-            {product.bestseller && (
-              <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full shadow-md">Bestseller</span>
-            )}
-            {product.featured && (
-              <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full shadow-md">Featured</span>
-            )}
-            {discount > 0 && (
-              <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow-md">{discount}% OFF</span>
-            )}
-          </div>
 
           {/* Stock Indicator */}
           <div className="absolute top-3 right-3">

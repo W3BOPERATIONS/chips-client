@@ -114,27 +114,27 @@ const AboutPage = () => {
 
   const values = [
     {
-      icon: "🌟",
-      title: "Quality First",
-      description: "We source only the finest ingredients and work with trusted manufacturers.",
+      icon: "🌿",
+      title: "Dried & Roasted",
+      description: "Never fried. Our traditional slice-dry-roast technique preserves natural flavors without excess oil.",
       bgImage: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
     },
     {
-      icon: "🚚",
-      title: "Fast Delivery",
-      description: "Fresh snacks delivered to your doorstep within 24-48 hours.",
+      icon: "👩‍🍳",
+      title: "Women-Led Production",
+      description: "Empowering rural women through sustainable livelihood and preserving traditional craftsmanship.",
       bgImage: "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
     },
     {
-      icon: "💚",
-      title: "Authentic Taste",
-      description: "Traditional recipes and authentic flavors that remind you of home.",
+      icon: "💫",
+      title: "Authentic Seasonings",
+      description: "Traditional Indian flavors curated with precision for the modern palate.",
       bgImage: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
     },
     {
-      icon: "🤝",
-      title: "Customer First",
-      description: "Your satisfaction is our priority. We're here to make your experience delightful.",
+      icon: "❤️",
+      title: "Mindful Craftsmanship",
+      description: "Small-batch production with care for both people and planet.",
       bgImage: "https://images.unsplash.com/photo-1552581234-26160f608093?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
     },
   ]
@@ -157,11 +157,11 @@ const AboutPage = () => {
               className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl"
               variants={fadeInUp}
             >
-              About ChipssStore
+              About Crunchy Wavez
             </motion.h1>
             <motion.p className="text-xl md:text-2xl leading-relaxed mb-8 max-w-4xl mx-auto text-gray-100 drop-shadow-lg" variants={fadeInUp}>
-              We're passionate about bringing you the finest selection of chips and snacks from across India. 
-              Founded in 2020, ChipssStore has become the go-to destination for authentic, delicious snacks that bring joy to every moment.
+              A celebration of India's culinary heritage — reimagined for the modern, health-conscious consumer. 
+              Tradition, Elevated.
             </motion.p>
             
             <motion.div 
@@ -170,8 +170,8 @@ const AboutPage = () => {
             >
               {[
                 { number: "10000", label: "Happy Customers" },
-                { number: "500", label: "Products" },
-                { number: "50", label: "Cities Served" }
+                { number: "500", label: "Craftswomen Empowered" },
+                { number: "50", label: "Traditional Recipes" }
               ].map((stat, index) => (
                 <motion.div key={index} variants={fadeInUp} className="group">
                   <div className="text-4xl md:text-6xl font-bold mb-2 group-hover:scale-110 transition-transform duration-300 text-yellow-400 drop-shadow-lg">
@@ -199,7 +199,7 @@ const AboutPage = () => {
           <motion.div className="text-center mb-16" variants={fadeInUp}>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Story</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              From humble beginnings to becoming India's favorite snack destination
+              Where tradition meets innovation in every crunch
             </p>
           </motion.div>
 
@@ -208,16 +208,16 @@ const AboutPage = () => {
               <motion.div variants={staggerContainer}>
                 <div className="space-y-6 text-gray-700 leading-relaxed text-lg">
                   {[
-                    "ChipsStore was born from a simple idea: everyone deserves access to delicious, authentic snacks that bring joy to their day. Our founder started this journey from a small kitchen in Mumbai with a vision to share the rich flavors of India with the world.",
-                    "What began as a passion project quickly grew into something bigger. We realized that people everywhere were craving authentic, high-quality snacks that reminded them of home. Our commitment to quality and taste helped us expand across the country.",
-                    "Today, we work with local manufacturers across India to bring you the most diverse collection of chips and snacks. Every product is carefully selected, tested, and packaged to ensure it reaches you in perfect condition, just like homemade."
+                    "Crunchy Wavez is a celebration of India's culinary heritage — reimagined for the modern, health-conscious consumer. Rooted in traditional wisdom, our chips are crafted using the classic slice–dry–roast technique, preserving the natural essence of real potatoes without the excess oil of conventional frying.",
+                    "Each batch is patiently dried, gently roasted and delicately seasoned, resulting in a light yet deeply flavourful crunch. We proudly partner with skilled rural women, transforming age-old home-style preparation into a sustainable livelihood model.",
+                    "Every pack represents not just a snack — but a craft, a culture and a cause. We're here to protect memories, preserve wisdom, and pass on a legacy with every bite."
                   ].map((paragraph, index) => (
                     <motion.div 
                       key={index} 
                       variants={fadeInUp}
                       className="relative group"
                     >
-                      <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border-l-4 border-yellow-500 transition-all duration-300 group-hover:shadow-xl group-hover:bg-white group-hover:border-yellow-600">
+                      <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border-l-4 border-green-500 transition-all duration-300 group-hover:shadow-xl group-hover:bg-white group-hover:border-green-600">
                         <p className="text-gray-700">{paragraph}</p>
                       </div>
                     </motion.div>
@@ -233,16 +233,6 @@ const AboutPage = () => {
                     className="w-full h-96 object-cover transform group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                  
-                  {/* Floating Badge - Without Tilt */}
-                  <motion.div 
-                    className="absolute -bottom-6 -right-6 bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-6 rounded-2xl shadow-2xl text-center"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <div className="text-2xl font-bold">Since 2020</div>
-                    <div className="text-md font-semibold">Quality Snacks</div>
-                  </motion.div>
                 </div>
               </motion.div>
             </div>
@@ -250,7 +240,7 @@ const AboutPage = () => {
         </div>
       </div>
 
-      {/* Values Section with Unique Background Image */}
+      {/* Craft Philosophy Section */}
       <div 
         className="relative py-24 min-h-[800px] flex items-center"
         style={{
@@ -262,9 +252,9 @@ const AboutPage = () => {
       >
         <div className="w-full max-w-6xl mx-auto px-4">
           <motion.div className="text-center mb-16" variants={fadeInUp}>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Values</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Craft Philosophy</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              These core values guide everything we do, from sourcing ingredients to delivering your order.
+              The art of creating snacks that nourish both body and soul
             </p>
           </motion.div>
 
@@ -300,6 +290,40 @@ const AboutPage = () => {
         </div>
       </div>
 
+      {/* Mission Section with Unique Background Image */}
+      <div 
+        className="relative py-24 text-white min-h-[600px] flex items-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1506477331477-33d5d8b3dc85?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        <motion.div 
+          className="relative w-full max-w-5xl mx-auto px-4 text-center"
+          variants={fadeInUp}
+        >
+          <h2 className="text-4xl md:text-6xl font-bold mb-8 text-white drop-shadow-2xl">Our Mission</h2>
+          <p className="text-xl md:text-2xl leading-relaxed mb-8 text-gray-100 drop-shadow-lg max-w-4xl mx-auto">
+            To create healthy, mindful, and culturally-rooted snacks that nourish both body and soul.
+          </p>
+          <p className="text-lg md:text-xl leading-relaxed mb-12 text-gray-200 drop-shadow-lg max-w-4xl mx-auto">
+            We believe that food is more than taste — it is culture, care, and connection. The slice–dry–roast technique 
+            we follow is not an industry process; it is a tradition passed down through Indian households for generations.
+          </p>
+          <motion.div 
+            whileHover={{ scale: 1.05 }} 
+            whileTap={{ scale: 0.95 }}
+            className="inline-block bg-gradient-to-r from-green-400 to-emerald-600 text-white px-10 py-4 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300"
+          >
+            <Link to="/">
+              Experience Tradition
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+
       {/* Team Section with Unique Background Image */}
       <div 
         className="relative py-24 min-h-[800px] flex items-center"
@@ -314,7 +338,7 @@ const AboutPage = () => {
           <motion.div className="text-center mb-16" variants={fadeInUp}>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              The passionate people behind ChipssStore who work to bring you the best snacking experience.
+              The passionate guardians of tradition who work to bring you an elevated snacking experience.
             </p>
           </motion.div>
 
@@ -354,49 +378,16 @@ const AboutPage = () => {
                   
                   <div className="p-8 bg-white">
                     <h3 className="text-2xl font-bold text-gray-900 mb-3">{member.name}</h3>
-                    <div className="text-yellow-600 font-semibold text-lg mb-4">{member.role}</div>
+                    <div className="text-green-600 font-semibold text-lg mb-4">{member.role}</div>
                     <p className="text-gray-600 leading-relaxed text-base">{member.description}</p>
                     
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                   </div>
-                  
-                  {/* Removed Team Badge as requested */}
                 </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
-      </div>
-
-      {/* Mission Section with Unique Background Image */}
-      <div 
-        className="relative py-24 text-white min-h-[600px] flex items-center"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1506477331477-33d5d8b3dc85?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
-        }}
-      >
-        <motion.div 
-          className="relative w-full max-w-5xl mx-auto px-4 text-center"
-          variants={fadeInUp}
-        >
-          <h2 className="text-4xl md:text-6xl font-bold mb-8 text-white drop-shadow-2xl">Our Mission</h2>
-          <p className="text-xl md:text-2xl leading-relaxed mb-12 text-gray-100 drop-shadow-lg max-w-4xl mx-auto">
-            To make authentic, high-quality Indian snacks accessible to everyone, everywhere. 
-            We believe that great snacks have the power to bring people together and create memories.
-          </p>
-          <motion.div 
-            whileHover={{ scale: 1.05 }} 
-            whileTap={{ scale: 0.95 }}
-            className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-10 py-4 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300"
-          >
-            <Link to="/">
-              Start Shopping
-            </Link>
-          </motion.div>
-        </motion.div>
       </div>
 
       {/* Contact CTA with Unique Background Image */}
@@ -411,17 +402,17 @@ const AboutPage = () => {
       >
         <AnimatedSection className="relative w-full max-w-4xl mx-auto px-4 text-center">
           <motion.div variants={fadeInUp}>
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Have Questions?</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Join Our Journey</h2>
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-              We'd love to hear from you. Get in touch with our friendly team for any inquiries.
+              Experience snacks crafted with tradition, care, and purpose. Get in touch to learn more about our story.
             </p>
             <motion.div 
               whileHover={{ scale: 1.05 }} 
               whileTap={{ scale: 0.95 }}
-              className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-10 py-4 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300"
+              className="inline-block bg-gradient-to-r from-green-400 to-emerald-600 text-white px-10 py-4 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300"
             >
               <Link to="/contact">
-                Contact Us
+                Connect With Us
               </Link>
             </motion.div>
           </motion.div>

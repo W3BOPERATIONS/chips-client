@@ -37,9 +37,9 @@ const SuccessModal = ({ isOpen, onClose, orderId, orderData }) => {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div
-          className={`bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[85vh] overflow-y-auto p-6 text-center transform transition-all duration-700 relative ${
+          className={`bg-white rounded-2xl shadow-2xl max-w-sm sm:max-w-md md:max-w-lg w-full max-h-[80vh] overflow-y-auto no-scrollbar p-5 sm:p-6 text-center transform transition-all duration-700 relative ${
             animationStep >= 1 ? "scale-100 opacity-100" : "scale-75 opacity-0"
           }`}
         >
@@ -188,17 +188,13 @@ const SuccessModal = ({ isOpen, onClose, orderId, orderData }) => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes drawCheck {
-          0% {
-            stroke-dasharray: 0 50;
-            stroke-dashoffset: 0;
-          }
-          100% {
-            stroke-dasharray: 50 50;
-            stroke-dashoffset: 0;
-          }
+          0% { stroke-dasharray: 0 50; stroke-dashoffset: 0; }
+          100% { stroke-dasharray: 50 50; stroke-dashoffset: 0; }
         }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
       `}</style>
 
       {showInvoice && orderData && (

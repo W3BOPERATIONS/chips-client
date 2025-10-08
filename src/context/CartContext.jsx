@@ -16,11 +16,13 @@ const cartReducer = (state, action) => {
           items: state.items.map((item) =>
             item._id === action.payload._id ? { ...item, quantity: item.quantity + 1 } : item,
           ),
+          itemAlreadyExisted: true,
         }
       }
       return {
         ...state,
         items: [...state.items, { ...action.payload, quantity: 1 }],
+        itemAlreadyExisted: false,
       }
 
     case "REMOVE_FROM_CART":
@@ -57,7 +59,7 @@ const cartReducer = (state, action) => {
 }
 
 export const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, { items: [] })
+  const [state, dispatch] = useReducer(cartReducer, { items: [], itemAlreadyExisted: false })
   const { isAuthenticated, user } = useAuth()
 
   const getCartKey = () => {
@@ -97,14 +99,24 @@ export const CartProvider = ({ children }) => {
       toast.info("Please sign in to add items to your cart", {
         position: "top-right",
         autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
       })
       return false
     }
+    const existingItem = state.items.find((item) => item._id === product._id)
+
+    if (existingItem) {
+      toast.info("This item is already in your cart.", {
+        position: "top-right",
+        autoClose: 2500,
+      })
+      return false
+    }
+
     dispatch({ type: "ADD_TO_CART", payload: product })
+    toast.success("Added to cart!", {
+      position: "top-right",
+      autoClose: 2000,
+    })
     return true
   }
 
@@ -128,6 +140,10 @@ export const CartProvider = ({ children }) => {
     return state.items.reduce((total, item) => total + item.quantity, 0)
   }
 
+  const getUniqueItemCount = () => {
+    return state.items.length
+  }
+
   const value = {
     items: state.items,
     addToCart,
@@ -136,6 +152,7 @@ export const CartProvider = ({ children }) => {
     clearCart,
     getTotalPrice,
     getTotalItems,
+    getUniqueItemCount,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext"
 import CartItem from "../components/CartItem"
 
 const CartPage = () => {
-  const { items, getTotalPrice, getTotalItems, clearCart } = useCart()
+  const { items, getTotalPrice, getTotalItems, getUniqueItemCount, clearCart } = useCart()
   const { isAuthenticated } = useAuth()
 
   if (!isAuthenticated) {
@@ -160,7 +160,7 @@ const CartPage = () => {
           <div className="card">
             <div className="p-8 border-b border-slate-200">
               <h2 className="text-2xl font-bold text-slate-800">
-                Cart Items ({getTotalItems()} {getTotalItems() === 1 ? "item" : "items"})
+                Cart Items ({getUniqueItemCount()} {getUniqueItemCount() === 1 ? "item" : "items"})
               </h2>
             </div>
 
@@ -179,8 +179,8 @@ const CartPage = () => {
         </div>
 
         {/* Order Summary */}
-        <div className="lg:col-span-1">
-          <div className="glass-effect rounded-3xl p-8 sticky top-24">
+        <div className="lg:col-span-1 flex flex-col items-start">
+          <div className="glass-effect rounded-3xl p-8 sticky top-24 w-full">
             <h2 className="text-2xl font-bold gradient-text mb-8">Order Summary</h2>
 
             <div className="space-y-4 mb-8">
@@ -194,15 +194,10 @@ const CartPage = () => {
                 <span className="text-green-600 font-semibold">Free</span>
               </div>
 
-              <div className="flex justify-between text-slate-600">
-                <span>Tax</span>
-                <span className="font-semibold">₹{(getTotalPrice() * 0.08).toFixed(2)}</span>
-              </div>
-
               <div className="border-t border-slate-200 pt-4">
                 <div className="flex justify-between text-2xl font-bold gradient-text">
                   <span>Total</span>
-                  <span>₹{(getTotalPrice() * 1.08).toFixed(2)}</span>
+                  <span>₹{getTotalPrice().toFixed(2)}</span>
                 </div>
               </div>
             </div>

@@ -1,3 +1,5 @@
+import ContactLink from "./ContactLink"
+
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-br from-slate-800 via-slate-900 to-indigo-900 text-white py-12 mt-16 relative overflow-hidden">
@@ -70,23 +72,49 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-white mb-6">Contact Info</h3>
             <div className="space-y-4">
+              {/* Emails */}
               <div className="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors duration-300">
                 <div className="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center">
                   <span>📧</span>
                 </div>
-                <span>info@chipsstore.com</span>
+                <div className="flex flex-col">
+                  <ContactLink
+                    type="email"
+                    value="crunchywavez.contact@gmail.com"
+                    className="no-underline hover:no-underline"
+                  />
+                  <ContactLink
+                    type="email"
+                    value="booking.crunchywavezz@gmail.com"
+                    className="no-underline hover:no-underline"
+                  />
+                </div>
               </div>
+
+              {/* Phones */}
               <div className="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors duration-300">
                 <div className="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center">
                   <span>📞</span>
                 </div>
-                <span>(555) 123-4567</span>
+                <div className="flex flex-col">
+                  <ContactLink type="phone" value="+91 94283 62005" className="no-underline hover:no-underline" />
+                  <ContactLink type="phone" value="+91 79843 31939" className="no-underline hover:no-underline" />
+                </div>
               </div>
+
+              {/* Address (single link) */}
               <div className="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors duration-300">
                 <div className="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center">
                   <span>📍</span>
                 </div>
-                <span>123 Snack Street, Food City</span>
+                <a
+                  href="https://www.google.com/maps?q=SF-228%20Samanvay%20Symphony,%20Vaikunth%20Crossing,%20Waghodia%20Main%20Road,%20Ankhol,%20Vadodara,%20Gujarat,%20India,%20390019"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-underline hover:no-underline"
+                >
+                  SF-228 Samanvay Symphony, Vaikunth Crossing, Waghodia Main Road, Ankhol, Vadodara, Gujarat, 390019
+                </a>
               </div>
             </div>
           </div>

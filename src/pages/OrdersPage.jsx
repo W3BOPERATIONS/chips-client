@@ -7,10 +7,12 @@ import LoadingSpinner from "../components/LoadingSpinner"
 import axios from "axios"
 import { toast } from "react-toastify"
 import { buildApiUrl } from "../config/api"
+import { useCart } from "../context/CartContext"
 
 const OrdersPage = () => {
   const { user, isAuthenticated, token } = useAuth()
   const navigate = useNavigate()
+  const { addToCart } = useCart()
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeFilter, setActiveFilter] = useState("all")
@@ -174,6 +176,39 @@ const OrdersPage = () => {
     document.body.appendChild(modal)
   }
 
+  const handleReorder = (order) => {
+    if (!isAuthenticated) {
+      toast.info("Please sign in to reorder", { position: "top-right", autoClose: 3000 })
+      navigate("/login")
+      return
+    }
+
+    // Convert order items to products and add to cart
+    let addedCount = 0
+    order.items.forEach((item) => {
+      const product = {
+        _id: item.productId || item._id,
+        name: item.name,
+        price: item.price,
+        imageURL: item.imageURL,
+        quantity: item.quantity,
+      }
+      // Add each item with its original quantity
+      for (let i = 0; i < item.quantity; i++) {
+        addToCart(product)
+      }
+      addedCount++
+    })
+
+    toast.success(`${addedCount} item${addedCount > 1 ? "s" : ""} added to cart!`, {
+      position: "top-right",
+      autoClose: 2500,
+    })
+
+    // Navigate to cart page
+    setTimeout(() => navigate("/cart"), 1000)
+  }
+
   if (loading) return <LoadingSpinner />
 
   return (
@@ -301,7 +336,10 @@ const OrdersPage = () => {
                           View Details
                         </button>
                         {order.status === "delivered" && (
-                          <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm font-medium">
+                          <button
+                            onClick={() => handleReorder(order)}
+                            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm font-medium"
+                          >
                             Reorder
                           </button>
                         )}
