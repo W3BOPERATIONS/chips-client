@@ -1,3 +1,4 @@
+
 "use client"
 
 import { Link, useNavigate } from "react-router-dom"
@@ -111,23 +112,23 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
           </div>
 
           {/* Right Section - Navigation and User Actions */}
-          <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
             {/* Quick Links - Hidden on mobile and tablet, shown on desktop */}
             <nav className="hidden xl:flex items-center space-x-4">
               <div className="relative group">
-                <button className="text-slate-600 hover:text-indigo-600 font-medium transition-all duration-300 hover:scale-105 flex items-center space-x-1 px-3 py-2 rounded-lg hover:bg-indigo-50 text-sm">
+                <button className="text-slate-600 hover:text-indigo-600 font-medium transition-all duration-300 hover:scale-105 flex items-center space-x-2 px-4 py-2.5 rounded-lg hover:bg-indigo-50 text-base">
                   <span>Quick Links</span>
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div className="absolute top-full left-0 mt-2 w-44 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
+                <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
                   {Array.isArray(categories) &&
                     categories.slice(0, 5).map((category) => (
                       <Link
                         key={category.id}
                         to={`/category/${category.id}`}
-                        className="flex items-center space-x-2 px-3 py-2 hover:bg-gray-50 transition-colors duration-200 first:rounded-t-xl last:rounded-b-xl text-sm"
+                        className="flex items-center space-x-2 px-4 py-2.5 hover:bg-gray-50 transition-colors duration-200 first:rounded-t-xl last:rounded-b-xl text-sm"
                       >
                         <span className="text-lg">{category.icon}</span>
                         <span className="text-gray-700 hover:text-indigo-600">{category.name}</span>
@@ -146,19 +147,19 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
               >
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center space-x-1 text-gray-700 hover:text-indigo-600 transition-colors px-1.5 sm:px-2 py-1.5 sm:py-2 rounded-lg hover:bg-indigo-50"
+                  className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 transition-colors px-3 py-2.5 rounded-lg hover:bg-indigo-50"
                 >
-                  <div className="w-6 h-6 sm:w-7 sm:h-7 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
                     {user?.name?.charAt(0)?.toUpperCase() || "U"}
                   </div>
-                  <span className="hidden lg:inline font-medium text-sm">{user?.name}</span>
-                  <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span className="hidden lg:inline font-medium text-base">{user?.name}</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
 
                 <div
-                  className={`absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 transition-all duration-200 ${
+                  className={`absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 transition-all duration-200 ${
                     showUserMenu
                       ? "opacity-100 visible"
                       : "opacity-0 invisible group-hover:opacity-100 group-hover:visible"
@@ -167,7 +168,7 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
                   <Link
                     to="/profile"
                     onClick={() => setShowUserMenu(false)}
-                    className="flex items-center space-x-2 px-3 py-1.5 hover:bg-gray-50 transition-colors text-sm"
+                    className="flex items-center space-x-2 px-4 py-2.5 hover:bg-gray-50 transition-colors text-sm"
                   >
                     <span>👤</span>
                     <span>Profile</span>
@@ -175,7 +176,7 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
                   <Link
                     to="/orders"
                     onClick={() => setShowUserMenu(false)}
-                    className="flex items-center space-x-2 px-3 py-1.5 hover:bg-gray-50 transition-colors text-sm"
+                    className="flex items-center space-x-2 px-4 py-2.5 hover:bg-gray-50 transition-colors text-sm"
                   >
                     <span>📦</span>
                     <span>Orders</span>
@@ -183,7 +184,7 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
                   <Link
                     to="/wishlist"
                     onClick={() => setShowUserMenu(false)}
-                    className="flex items-center space-x-2 px-3 py-1.5 hover:bg-gray-50 transition-colors text-sm"
+                    className="flex items-center space-x-2 px-4 py-2.5 hover:bg-gray-50 transition-colors text-sm"
                   >
                     <span>❤️</span>
                     <span>Wishlist</span>
@@ -191,7 +192,7 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
                   <hr className="my-1" />
                   <button
                     onClick={handleLogout}
-                    className="flex items-center space-x-2 px-3 py-1.5 hover:bg-gray-50 transition-colors w-full text-left text-red-600 text-sm"
+                    className="flex items-center space-x-2 px-4 py-2.5 hover:bg-gray-50 transition-colors w-full text-left text-red-600 text-sm"
                   >
                     <span>🚪</span>
                     <span>Sign Out</span>
@@ -202,14 +203,14 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
               <div className="flex items-center bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200 shadow-sm">
                 <Link
                   to="/login"
-                  className="text-gray-600 hover:text-indigo-600 font-medium transition-colors px-2 sm:px-3 py-1.5 sm:py-2 rounded-l-lg hover:bg-gray-50 text-xs sm:text-sm"
+                  className="text-gray-600 hover:text-indigo-600 font-medium transition-colors px-4 py-2.5 rounded-l-lg hover:bg-gray-50 text-sm"
                 >
                   Sign In
                 </Link>
-                <div className="w-px h-3 sm:h-4 bg-gray-300"></div>
+                <div className="w-px h-5 bg-gray-300"></div>
                 <Link
                   to="/register"
-                  className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-r-lg font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-xs sm:text-sm"
+                  className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2.5 rounded-r-lg font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm"
                 >
                   Sign Up
                 </Link>
@@ -219,9 +220,9 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
             {/* Cart Button */}
             <Link
               to="/cart"
-              className="relative bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-1 pulse-glow"
+              className="relative bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2.5 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 pulse-glow"
             >
-              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -229,9 +230,9 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6"
                 />
               </svg>
-              <span className="hidden sm:inline text-xs sm:text-sm">Cart</span>
+              <span className="hidden sm:inline text-sm">Cart</span>
               {getUniqueItemCount() > 0 && (
-                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center shadow-lg animate-bounce">
+                <span className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shadow-lg animate-bounce">
                   {getUniqueItemCount()}
                 </span>
               )}
