@@ -489,9 +489,8 @@ const ProductDetailsPage = () => {
                       </>
                     )}
                   </div>
-                  <p className="text-sm text-gray-600 font-medium">
-                    Inclusive of all taxes • Free shipping on orders above ₹499
-                  </p>
+                  {/* Free shipping on orders above ₹499 */}
+                  <p className="text-sm text-gray-600 font-medium">Free shipping on orders above ₹499</p>
                 </div>
 
                 <div className="flex items-center space-x-4 bg-gray-50 rounded-xl p-4">

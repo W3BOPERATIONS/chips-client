@@ -156,7 +156,7 @@ const AdminOrdersList = ({ orders, onUpdateStatus }) => {
                   <p className="text-2xl font-bold text-green-600">
                     ₹{(order.totalAmount || order.totalPrice || 0).toLocaleString()}
                   </p>
-                  {order.tax && <p className="text-sm text-gray-500">(includes ₹{order.tax.toFixed(2)} tax)</p>}
+                  {/* Removed tax caption entirely */}
                 </div>
 
                 <div className="flex gap-2">
