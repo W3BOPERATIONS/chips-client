@@ -25,14 +25,17 @@ const CustomizeHamperModal = (props) => {
     onProceed,
   } = props
 
-  // Resolve flavor list from available data
+  // Always show all available flavors for customization
   const flavorList = useMemo(() => {
+    // If flavors are explicitly provided, use them
     if (Array.isArray(flavors) && flavors.length > 0) return flavors
-    if (Array.isArray(product?.contents) && product.contents.length > 0) return product.contents.map((c) => c.flavor)
+    
+    // Otherwise, use all available flavors from hamperQty
     if (hamperQty && typeof hamperQty === "object") return Object.keys(hamperQty)
-    if (qty && typeof qty === "object") return Object.keys(qty)
-    return []
-  }, [flavors, product, hamperQty, qty])
+    
+    // Fallback to default flavors
+    return ["Salty Hungama", "Tomato Chatpata", "Onion Tadka", "Desi Garlic", "Chilli Lemon"]
+  }, [flavors, hamperQty])
 
   const getQty = (flavor) => {
     if (hamperQty) return Number(hamperQty[flavor] || 0)
@@ -63,22 +66,8 @@ const CustomizeHamperModal = (props) => {
     }
   }, [isOpen])
 
-  useEffect(() => {
-    if (!isOpen) return
-    if (selectedTotal >= minPackets) return
-
-    const deficit = minPackets - selectedTotal
-    const firstFlavor = flavorList[0]
-    if (!firstFlavor) return
-
-    if (typeof updateHamperCount === "function") {
-      for (let i = 0; i < deficit; i++) updateHamperCount(firstFlavor, 1)
-    } else if (typeof setQty === "function" && qty) {
-      const next = { ...qty }
-      next[firstFlavor] = (next[firstFlavor] || 0) + deficit
-      setQty(next)
-    }
-  }, [isOpen, selectedTotal, minPackets, flavorList, updateHamperCount, setQty, qty])
+  // REMOVED: Auto-fill to minimum packets when modal opens
+  // Now starting with all flavors at 0
 
   if (!isOpen) return null
 
@@ -93,16 +82,14 @@ const CustomizeHamperModal = (props) => {
   }
 
   const decrease = (flavor) => {
-    // prevent decreasing below minimum total
-    if (selectedTotal <= minPackets) return
+    const currentQty = getQty(flavor)
+    if (currentQty <= 0) return
 
     if (typeof updateHamperCount === "function") {
       updateHamperCount(flavor, -1)
     } else if (typeof setQty === "function") {
       const next = { ...(qty || {}) }
       next[flavor] = Math.max(0, Number(next[flavor] || 0) - 1)
-      const nextTotal = flavorList.reduce((s, f) => s + Number(f === flavor ? next[f] : getQty(f)), 0)
-      if (nextTotal < minPackets) return
       setQty(next)
     }
   }
@@ -133,7 +120,7 @@ const CustomizeHamperModal = (props) => {
           <div>
             <h3 className="text-xl font-semibold text-gray-900">🎨 Customize Your Hamper</h3>
             <p className="text-sm text-gray-600 mt-1">
-              Select at least {minPackets} packets. Tap + or − to adjust packet counts.
+              Select at least {minPackets} packets. Mix and match any flavors you like!
             </p>
           </div>
           <button
@@ -157,9 +144,9 @@ const CustomizeHamperModal = (props) => {
                 <button
                   type="button"
                   onClick={() => decrease(flavor)}
-                  disabled={selectedTotal <= minPackets}
+                  disabled={getQty(flavor) <= 0}
                   className={`w-8 h-8 rounded-lg border font-bold ${
-                    selectedTotal <= minPackets ? "text-gray-300 cursor-not-allowed" : "text-gray-600 hover:bg-gray-100"
+                    getQty(flavor) <= 0 ? "text-gray-300 cursor-not-allowed" : "text-gray-600 hover:bg-gray-100"
                   }`}
                   aria-label={`Decrease ${flavor}`}
                 >
@@ -182,8 +169,8 @@ const CustomizeHamperModal = (props) => {
         {/* Footer */}
         <div className="flex items-center justify-between mt-5">
           <div className="text-sm text-gray-700">
-            Selected: <span className="font-semibold">{selectedTotal}</span>{" "}
-            <span className="text-gray-500">(₹{product?.packetPrice ?? perPacketPrice}/packet)</span>
+            Selected: <span className="font-semibold">{selectedTotal}</span> packets
+            <span className="text-gray-500 ml-1">(₹{product?.packetPrice ?? perPacketPrice}/packet)</span>
             <div className="mt-1">
               Total: <span className="font-semibold text-orange-600 text-base">₹{price}</span>
             </div>

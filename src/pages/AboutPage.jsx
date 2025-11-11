@@ -78,7 +78,7 @@ const Counter = ({ end, duration = 2 }) => {
 const AboutPage = () => {
   const teamMembers = [
     {
-      name: "Rajesh Kumar",
+      name: "Bhatt Devanshi",
       role: "Founder & CEO",
       image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
       description: "Passionate about bringing authentic Indian snacks to the world.",
@@ -89,8 +89,8 @@ const AboutPage = () => {
       }
     },
     {
-      name: "Priya Sharma",
-      role: "Head of Operations",
+      name: "Parth Parekh",
+      role: "Founder & CFO",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
       description: "Ensures quality and freshness in every product we deliver.",
       social: {
@@ -99,17 +99,17 @@ const AboutPage = () => {
         email: "#"
       }
     },
-    {
-      name: "Amit Patel",
-      role: "Product Manager",
-      image: "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=400&h=400&fit=crop&crop=face",
-      description: "Curates the best snacks from across India for our customers.",
-      social: {
-        linkedin: "#",
-        twitter: "#",
-        email: "#"
-      }
-    },
+    // {
+    //   name: "Amit Patel",
+    //   role: "Product Manager",
+    //   image: "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=400&h=400&fit=crop&crop=face",
+    //   description: "Curates the best snacks from across India for our customers.",
+    //   social: {
+    //     linkedin: "#",
+    //     twitter: "#",
+    //     email: "#"
+    //   }
+    // },
   ]
 
   const values = [
@@ -169,9 +169,9 @@ const AboutPage = () => {
               variants={staggerContainer}
             >
               {[
-                { number: "10000", label: "Happy Customers" },
-                { number: "500", label: "Craftswomen Empowered" },
-                { number: "50", label: "Traditional Recipes" }
+                { number: "1500", label: "Happy Customers" },
+                { number: "10", label: "Craftswomen Empowered" },
+                { number: "5", label: "Traditional Recipes" }
               ].map((stat, index) => (
                 <motion.div key={index} variants={fadeInUp} className="group">
                   <div className="text-4xl md:text-6xl font-bold mb-2 group-hover:scale-110 transition-transform duration-300 text-yellow-400 drop-shadow-lg">

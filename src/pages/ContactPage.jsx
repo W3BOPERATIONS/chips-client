@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Link } from "react-router-dom"
-import { motion } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import { buildApiUrl } from "../config/api"
-import ContactLink from "../components/ContactLink"
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { buildApiUrl } from "../config/api";
+import ContactLink from "../components/ContactLink";
 
 // Animation variants (same as AboutPage)
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-}
+};
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -21,19 +21,23 @@ const staggerContainer = {
       staggerChildren: 0.2,
     },
   },
-}
+};
 
 const scaleIn = {
   hidden: { opacity: 0, scale: 0.8 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
-}
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
 
 // Animated component wrapper (same as AboutPage)
 const AnimatedSection = ({ children, className = "" }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
+  });
 
   return (
     <motion.div
@@ -45,8 +49,8 @@ const AnimatedSection = ({ children, className = "" }) => {
     >
       {children}
     </motion.div>
-  )
-}
+  );
+};
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -55,21 +59,21 @@ const ContactPage = () => {
     phone: "",
     subject: "",
     message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState(null)
-  const [openFaqIndex, setOpenFaqIndex] = useState(null)
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       const response = await fetch(buildApiUrl("api/contact"), {
@@ -78,37 +82,39 @@ const ContactPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.ok && data.success) {
-        setSubmitStatus("success")
+        setSubmitStatus("success");
         setFormData({
           name: "",
           email: "",
           phone: "",
           subject: "",
           message: "",
-        })
+        });
       } else {
-        setSubmitStatus("error")
+        setSubmitStatus("error");
       }
     } catch (error) {
-      console.error("[v0] Contact form error:", error)
-      setSubmitStatus("error")
+      console.error("[v0] Contact form error:", error);
+      setSubmitStatus("error");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const toggleFaq = (index) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index)
-  }
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
 
   const mapAddress =
-    "SF-228 Samanvay Symphony, Vaikunth Crossing, Waghodia Main Road, Ankhol, Vadodara, Gujarat, India, 390019"
-  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapAddress)}`
+    "SF-228 Samanvay Symphony, Vaikunth Crossing, Waghodia Main Road, Ankhol, Vadodara, Gujarat, India, 390019";
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    mapAddress
+  )}`;
 
   const contactInfo = [
     {
@@ -168,7 +174,7 @@ const ContactPage = () => {
         "We reply within 24 hours",
       ],
     },
-  ]
+  ];
 
   const faqs = [
     {
@@ -188,26 +194,30 @@ const ContactPage = () => {
     },
     {
       question: "What ingredients are used?",
-      answer: "We use 100% real potatoes, natural spices, and minimal oil — nothing artificial.",
+      answer:
+        "We use 100% real potatoes, natural spices, and minimal oil — nothing artificial.",
     },
     {
       question: "Suitable for all ages?",
-      answer: "Absolutely. Kids, adults, everyone can enjoy a wholesome, crunchy snack.",
+      answer:
+        "Absolutely. Kids, adults, everyone can enjoy a wholesome, crunchy snack.",
     },
     {
       question: "How should I store them?",
-      answer: "Keep in a cool, dry place and reseal after opening to maintain freshness.",
+      answer:
+        "Keep in a cool, dry place and reseal after opening to maintain freshness.",
     },
     {
       question: "Can I place bulk or custom orders?",
-      answer: "Yes! We offer bulk orders and custom packaging for events or gifting.",
+      answer:
+        "Yes! We offer bulk orders and custom packaging for events or gifting.",
     },
     {
       question: "Are your practices sustainable?",
       answer:
         "Absolutely. From artisan production to women-led empowerment, we focus on ethical, responsible snacking.",
     },
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
@@ -223,15 +233,19 @@ const ContactPage = () => {
       >
         <div className="relative w-full max-w-6xl mx-auto px-4 py-20 text-center">
           <AnimatedSection>
-            <motion.h1 className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl" variants={fadeInUp}>
+            <motion.h1
+              className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl"
+              variants={fadeInUp}
+            >
               Get In Touch
             </motion.h1>
             <motion.p
               className="text-xl md:text-2xl leading-relaxed mb-8 max-w-4xl mx-auto text-gray-100 drop-shadow-lg"
               variants={fadeInUp}
             >
-              Have a question, suggestion, or just want to say hello? We'd love to hear from you. Our friendly team is
-              here to help make your snacking experience amazing.
+              Have a question, suggestion, or just want to say hello? We'd love
+              to hear from you. Our friendly team is here to help make your
+              snacking experience amazing.
             </motion.p>
           </AnimatedSection>
         </div>
@@ -249,13 +263,18 @@ const ContactPage = () => {
       >
         <div className="w-full max-w-6xl mx-auto px-4">
           <motion.div className="text-center mb-16" variants={fadeInUp}>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Crunchywavez</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Crunchywavez
+            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Multiple ways to connect with our team. We're always here to help!
             </p>
           </motion.div>
 
-          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16" variants={staggerContainer}>
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
+            variants={staggerContainer}
+          >
             {contactInfo.map((info, index) => (
               <motion.div
                 key={index}
@@ -267,7 +286,9 @@ const ContactPage = () => {
                   <div className="text-5xl mb-6 transform group-hover:scale-110 transition-transform duration-500">
                     {info.icon}
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">{info.title}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                    {info.title}
+                  </h3>
                   <div className="space-y-3">
                     {info.details.map((detail, idx) => (
                       <p key={idx} className="text-gray-700 leading-relaxed">
@@ -296,7 +317,9 @@ const ContactPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Contact Form */}
             <AnimatedSection className="bg-white rounded-3xl shadow-2xl p-8 border-2 border-gray-100 self-start">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Send us a Message
+              </h2>
 
               {submitStatus === "success" && (
                 <motion.div
@@ -304,7 +327,8 @@ const ContactPage = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6"
                 >
-                  Thank you for your message! We'll get back to you within 24 hours.
+                  Thank you for your message! We'll get back to you within 24
+                  hours.
                 </motion.div>
               )}
 
@@ -314,15 +338,18 @@ const ContactPage = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6"
                 >
-                  There was an error sending your message. Please try again or email us directly at
-                  crunchywavez.contact@gmail.com
+                  There was an error sending your message. Please try again or
+                  email us directly at crunchywavez.contact@gmail.com
                 </motion.div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <motion.div variants={fadeInUp}>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Full Name *
                     </label>
                     <input
@@ -338,7 +365,10 @@ const ContactPage = () => {
                   </motion.div>
 
                   <motion.div variants={fadeInUp}>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Email Address *
                     </label>
                     <input
@@ -356,7 +386,10 @@ const ContactPage = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <motion.div variants={fadeInUp}>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Phone Number
                     </label>
                     <input
@@ -371,7 +404,10 @@ const ContactPage = () => {
                   </motion.div>
 
                   <motion.div variants={fadeInUp}>
-                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="subject"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Subject *
                     </label>
                     <select
@@ -394,7 +430,10 @@ const ContactPage = () => {
                 </div>
 
                 <motion.div variants={fadeInUp}>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Message *
                   </label>
                   <textarea
@@ -418,7 +457,11 @@ const ContactPage = () => {
                 >
                   {isSubmitting ? (
                     <div className="flex items-center justify-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-900" fill="none" viewBox="0 0 24 24">
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-900"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
                         <circle
                           className="opacity-25"
                           cx="12"
@@ -460,7 +503,8 @@ const ContactPage = () => {
                 </div>
                 <div className="p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                   <div className="text-gray-700 font-semibold">
-                    SF-228 Samanvay Symphony, Vaikunth Crossing, Waghodia Main Road, Ankhol, Vadodara, Gujarat, 390019
+                    SF-228 Samanvay Symphony, Vaikunth Crossing, Waghodia Main
+                    Road, Ankhol, Vadodara, Gujarat, 390019
                   </div>
                   <a
                     href="https://www.google.com/maps/dir/?api=1&destination=SF-228%20Samanvay%20Symphony,%20Vaikunth%20Crossing,%20Waghodia%20Main%20Road,%20Ankhol,%20Vadodara,%20Gujarat,%20India,%20390019"
@@ -475,7 +519,9 @@ const ContactPage = () => {
 
               {/* Enhanced Business Hours */}
               <AnimatedSection className="bg-white rounded-3xl shadow-2xl p-8 border-2 border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Business Hours</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  Business Hours
+                </h3>
                 <div className="space-y-4">
                   {[
                     {
@@ -499,8 +545,14 @@ const ContactPage = () => {
                       className="flex justify-between items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300"
                       whileHover={{ x: 5 }}
                     >
-                      <span className="text-gray-700 font-medium">{schedule.day}</span>
-                      <span className={`font-bold ${schedule.open ? "text-green-600" : "text-red-500"}`}>
+                      <span className="text-gray-700 font-medium">
+                        {schedule.day}
+                      </span>
+                      <span
+                        className={`font-bold ${
+                          schedule.open ? "text-green-600" : "text-red-500"
+                        }`}
+                      >
                         {schedule.time}
                       </span>
                     </motion.div>
@@ -510,7 +562,9 @@ const ContactPage = () => {
 
               {/* Enhanced Quick Links */}
               <AnimatedSection className="bg-white rounded-3xl shadow-2xl p-8 border-2 border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Quick Links</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  Quick Links
+                </h3>
                 <div className="space-y-4">
                   {[
                     {
@@ -530,7 +584,11 @@ const ContactPage = () => {
                       href: "/bulk-orders",
                     },
                   ].map((link, index) => (
-                    <motion.div key={index} whileHover={{ x: 5 }} className="group">
+                    <motion.div
+                      key={index}
+                      whileHover={{ x: 5 }}
+                      className="group"
+                    >
                       <Link
                         to={link.href}
                         className="block text-gray-700 hover:text-yellow-600 transition-all duration-300 py-2 border-b border-gray-100 group-hover:border-yellow-200"
@@ -561,13 +619,19 @@ const ContactPage = () => {
       >
         <div className="w-full max-w-6xl mx-auto px-4">
           <motion.div className="text-center mb-16" variants={fadeInUp}>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Frequently Asked Questions
+            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Quick answers to common questions. Can't find what you're looking for? Contact us directly.
+              Quick answers to common questions. Can't find what you're looking
+              for? Contact us directly.
             </p>
           </motion.div>
 
-          <motion.div className="max-w-4xl mx-auto space-y-4" variants={staggerContainer}>
+          <motion.div
+            className="max-w-4xl mx-auto space-y-4"
+            variants={staggerContainer}
+          >
             {faqs.map((faq, index) => (
               <motion.div
                 key={index}
@@ -578,14 +642,26 @@ const ContactPage = () => {
                   onClick={() => toggleFaq(index)}
                   className="w-full px-8 py-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors duration-300"
                 >
-                  <h3 className="text-xl font-bold text-gray-900 pr-4">{faq.question}</h3>
+                  <h3 className="text-xl font-bold text-gray-900 pr-4">
+                    {faq.question}
+                  </h3>
                   <motion.div
                     animate={{ rotate: openFaqIndex === index ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
                     className="flex-shrink-0"
                   >
-                    <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <svg
+                      className="w-6 h-6 text-yellow-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   </motion.div>
                 </button>
@@ -600,7 +676,9 @@ const ContactPage = () => {
                   className="overflow-hidden"
                 >
                   <div className="px-8 pb-6 pt-2 border-t border-gray-100">
-                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                    <p className="text-gray-600 leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
                 </motion.div>
               </motion.div>
@@ -610,20 +688,22 @@ const ContactPage = () => {
           {/* Additional CTA */}
           <AnimatedSection className="text-center mt-16">
             <motion.div variants={fadeInUp}>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Still have questions?</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                Want to know more about us?
+              </h3>
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300"
               >
-                <Link to="/contact">Contact Support</Link>
+                <Link to="/about">Learn Our Story</Link>
               </motion.div>
             </motion.div>
           </AnimatedSection>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ContactPage
+export default ContactPage;

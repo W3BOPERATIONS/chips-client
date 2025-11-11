@@ -34,8 +34,9 @@ const ProductDetailsPage = () => {
   const [zoomPos, setZoomPos] = useState({ xPct: 50, yPct: 50 })
   const zoomLevel = 3
 
-  const defaultFlavors = ["Salty Hungama", "Tomato Chatpata", "Onion Tadka", "Desi Garlic", "Chilli Lemon"]
-  const initialHamperQuantities = defaultFlavors.reduce((acc, f) => ({ ...acc, [f]: 0 }), {})
+  // All available flavors for hamper customization
+  const allFlavors = ["Salty Hungama", "Tomato Chatpata", "Onion Tadka", "Desi Garlic", "Chilli Lemon"]
+  const initialHamperQuantities = allFlavors.reduce((acc, f) => ({ ...acc, [f]: 0 }), {})
   const [hamperQty, setHamperQty] = useState(initialHamperQuantities)
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false)
 
@@ -239,10 +240,8 @@ const ProductDetailsPage = () => {
     })
   }
 
-  const hamperFlavors =
-    Array.isArray(product?.contents) && product.contents.length > 0
-      ? product.contents.map((c) => c.flavor)
-      : defaultFlavors
+  // Always use all flavors for hamper customization
+  const hamperFlavors = allFlavors
 
   const totalSelectedPackets = Object.values(hamperQty).reduce((sum, val) => sum + Number(val || 0), 0)
   const minPackets = 10
@@ -252,8 +251,6 @@ const ProductDetailsPage = () => {
   const updateHamperCount = (flavor, delta) => {
     const next = { ...hamperQty }
     next[flavor] = Math.max(0, Number(next[flavor] || 0) + delta)
-    const nextTotal = Object.values(next).reduce((s, v) => s + Number(v || 0), 0)
-    if (nextTotal < minPackets) return
     setHamperQty(next)
   }
 
@@ -535,15 +532,7 @@ const ProductDetailsPage = () => {
                   {isHamper && (
                     <button
                       type="button"
-                      onClick={() => {
-                        if (totalSelectedPackets < minPackets) {
-                          const first = (hamperFlavors && hamperFlavors[0]) || "Assorted"
-                          const deficit = minPackets - totalSelectedPackets
-                          const next = { ...hamperQty, [first]: (hamperQty[first] || 0) + deficit }
-                          setHamperQty(next)
-                        }
-                        setIsCustomizeOpen(true)
-                      }}
+                      onClick={() => setIsCustomizeOpen(true)}
                       className="group bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-xl font-bold text-base hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
                       aria-label="Customize your hamper"
                     >
