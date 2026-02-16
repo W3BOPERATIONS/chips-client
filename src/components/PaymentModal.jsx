@@ -37,11 +37,13 @@ const PaymentModal = ({ isOpen, onClose, orderData }) => {
       .then((CashfreeClass) => {
         // Instantiate Cashfree with correct mode
         const isLocalHost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-        const mode = isLocalHost ? "sandbox" : "production";
-        
+        // USE ENV VAR IF AVAILABLE, otherwise fallback to localhost check
+        const envMode = import.meta.env.VITE_CASHFREE_MODE;
+        const mode = envMode || (isLocalHost ? "sandbox" : "production");
+
         console.log(`Initializing Cashfree in ${mode} mode`);
         const cfInstance = new CashfreeClass({ mode: mode });
-        
+
         setCashfree(cfInstance);
         console.log("Cashfree SDK initialized");
       })
@@ -60,7 +62,7 @@ const PaymentModal = ({ isOpen, onClose, orderData }) => {
     }
 
     setProcessing(true)
-    
+
     try {
       // 1. Create Order on Backend
       const response = await axios.post(buildApiUrl("api/payment/create"), {
@@ -75,7 +77,7 @@ const PaymentModal = ({ isOpen, onClose, orderData }) => {
 
       if (response.data.status === "success" && response.data.data.payment_session_id) {
         const paymentSessionId = response.data.data.payment_session_id;
-        
+
         // 2. Initialize Cashfree Checkout
         const checkoutOptions = {
           paymentSessionId: paymentSessionId,
@@ -87,10 +89,10 @@ const PaymentModal = ({ isOpen, onClose, orderData }) => {
         // 3. Start checkout
         const result = await cashfree.checkout(checkoutOptions);
         console.log("Checkout result:", result);
-        
+
         // If we reach here, checkout initialized successfully
         // The page will redirect automatically
-        
+
       } else {
         toast.error(response.data.message || "Failed to create payment session")
         setProcessing(false)
@@ -98,7 +100,7 @@ const PaymentModal = ({ isOpen, onClose, orderData }) => {
 
     } catch (error) {
       console.error("Payment error:", error);
-      
+
       // Check specific error types
       if (error.message && error.message.includes("redirect")) {
         // Try direct redirect as fallback
@@ -107,7 +109,7 @@ const PaymentModal = ({ isOpen, onClose, orderData }) => {
           return;
         }
       }
-      
+
       toast.error(error.response?.data?.message || "Payment failed. Please try again.")
       setProcessing(false)
     }
