@@ -7,10 +7,10 @@ export const getProductImage = (product, type = 'collection') => {
     if (imageUrl?.startsWith('http')) {
         const slug = productName.toLowerCase().replace(/\s+/g, '-');
         if (type === 'details') {
-            return `/public/details/${slug}.png`;
+            return `/details/${slug}.png`;
         }
         // defaulting to collection for cards, cart, checkout
-        return `/public/collections/${slug}.png`;
+        return `/collections/${slug}.png`;
     }
 
     return imageUrl || "/placeholder.svg";
