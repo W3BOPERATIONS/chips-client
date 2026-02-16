@@ -214,7 +214,7 @@ const AdminPage = () => {
       const product = products.find((p) => p._id === productId)
       const response = await axios.put(
         buildApiUrl(`api/admin/products/${productId}`),
-        { ...product, quantity: newQuantity, inStock: newQuantity > 0 },
+        { ...product, quantity: newQuantity, stock: newQuantity, inStock: newQuantity > 0 },
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -292,7 +292,7 @@ const AdminPage = () => {
             <nav className="flex space-x-8 px-6">
               {[
                 { id: "dashboard", name: "Dashboard", icon: "📊" },
-                { id: "products", name: `Products (${products.length})`, icon: "📦" },
+                { id: "products", name: `Products (${products.filter(p => p.category !== "custom-hamper").length})`, icon: "📦" },
                 { id: "add-product", name: editingProduct ? "Edit Product" : "Add Product", icon: "➕" },
                 { id: "orders", name: `Orders (${orders.length})`, icon: "🛒" },
                 { id: "analytics", name: "Analytics", icon: "📈" },

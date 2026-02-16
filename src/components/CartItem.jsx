@@ -1,5 +1,6 @@
 "use client"
 import { useCart } from "../context/CartContext"
+import { getProductImage } from "../utils/imageUtils"
 
 const CartItem = ({ item }) => {
   const { updateQuantity, removeFromCart } = useCart()
@@ -22,7 +23,7 @@ const CartItem = ({ item }) => {
         {/* Product Image */}
         <div className="flex-shrink-0">
           <img
-            src={item.imageURL || "/placeholder.svg"}
+            src={getProductImage(item)}
             alt={item.name}
             className="w-20 h-20 object-cover rounded-lg"
           />

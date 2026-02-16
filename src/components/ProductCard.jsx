@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import StarRating from "./StarRating"
 import { toast } from "react-toastify"
+import { getProductImage } from "../utils/imageUtils"
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart()
@@ -88,7 +89,7 @@ const ProductCard = ({ product }) => {
         {/* Image Section */}
         <div className="relative overflow-hidden">
           <img
-            src={product.imageURL || "/placeholder.svg"}
+            src={getProductImage(product)}
             alt={product.name}
             className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
           />
@@ -98,9 +99,15 @@ const ProductCard = ({ product }) => {
           {/* Stock Indicator */}
           <div className="absolute top-3 right-3">
             {product.stock > 0 ? (
-              <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-medium shadow">
-                In Stock
-              </span>
+              product.stock < 20 ? (
+                <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-medium shadow animate-pulse">
+                  Hurry! Only Few Left
+                </span>
+              ) : (
+                <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-medium shadow">
+                  In Stock
+                </span>
+              )
             ) : (
               <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-medium shadow">
                 Out of Stock
@@ -112,18 +119,16 @@ const ProductCard = ({ product }) => {
           <button
             onClick={handleWishlistToggle}
             disabled={wishlistLoading}
-            className={`absolute bottom-3 right-3 p-3 rounded-full bg-white/90 backdrop-blur shadow-md hover:scale-110 transition-all duration-300 border border-gray-100 ${
-              isInWishlist ? "bg-red-100" : ""
-            }`}
+            className={`absolute bottom-3 right-3 p-3 rounded-full bg-white/90 backdrop-blur shadow-md hover:scale-110 transition-all duration-300 border border-gray-100 ${isInWishlist ? "bg-red-100" : ""
+              }`}
             title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
           >
             {wishlistLoading ? (
               <div className="w-5 h-5 border-2 border-red-300 border-t-red-500 rounded-full animate-spin"></div>
             ) : (
               <svg
-                className={`w-5 h-5 transition-colors ${
-                  isInWishlist ? "text-red-500" : "text-gray-400 hover:text-red-500"
-                }`}
+                className={`w-5 h-5 transition-colors ${isInWishlist ? "text-red-500" : "text-gray-400 hover:text-red-500"
+                  }`}
                 fill={isInWishlist ? "currentColor" : "none"}
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -167,9 +172,8 @@ const ProductCard = ({ product }) => {
           <div className="flex flex-col gap-3 mt-auto">
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold text-indigo-600">₹{product.price}</span>
-              {product.originalPrice && (
-                <span className="text-gray-400 line-through text-sm">₹{product.originalPrice}</span>
-              )}
+              <span className="text-gray-400 line-through text-lg">₹{Math.round(product.price / 0.9)}</span>
+              <span className="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">-10%</span>
             </div>
 
             {/* Action Buttons */}
@@ -189,13 +193,17 @@ const ProductCard = ({ product }) => {
                 Add to Cart
               </button>
               <button
-                onClick={handleBuyNow}
+                onClick={(e) => {
+                  e.preventDefault()
+                  navigate(`/product/${product._id}`)
+                }}
                 className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow hover:scale-[1.03] hover:shadow-lg transition-all flex items-center justify-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
-                Buy Now
+                View Details
               </button>
             </div>
           </div>

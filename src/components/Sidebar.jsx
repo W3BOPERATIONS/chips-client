@@ -9,6 +9,8 @@ const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation()
   const { user, isAuthenticated } = useAuth()
   const [categories, setCategories] = useState([])
+  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false)
+  const [isProductsHovered, setIsProductsHovered] = useState(false)
 
   useEffect(() => {
     fetchCategories()
@@ -32,9 +34,18 @@ const Sidebar = ({ isOpen, onClose }) => {
     }
   }
 
+  // Flavours data - static as per your requirement
+  const flavours = [
+    { id: "salty-hungama", name: "Salty Hungama", icon: "🧂" },
+    { id: "tomato-chatpata", name: "Tomato Chatpata", icon: "🍅" },
+    { id: "onion-tadka", name: "Onion Tadka", icon: "🧅" },
+    { id: "desi-garlic", name: "Desi Garlic", icon: "🧄" },
+    { id: "chilli-lemon", name: "Chilli Lemon", icon: "🌶️" },
+  ]
+
   const mainMenuItems = [
     { name: "Home", path: "/", icon: "🏠" },
-    { name: "All Products", path: "/products", icon: "🛍️" },
+    { name: "All Products", path: "/products", icon: "🛍️", hasDropdown: true },
     { name: "Cart", path: "/cart", icon: "🛒" },
     { name: "Orders", path: "/orders", icon: "📦" },
     { name: "Wishlist", path: "/wishlist", icon: "❤️" },
@@ -49,6 +60,20 @@ const Sidebar = ({ isOpen, onClose }) => {
   const isActivePath = (path) => {
     return location.pathname === path
   }
+
+  const toggleProductsDropdown = () => {
+    setIsProductsDropdownOpen(!isProductsDropdownOpen)
+  }
+
+  const handleMouseEnterProducts = () => {
+    setIsProductsHovered(true)
+  }
+
+  const handleMouseLeaveProducts = () => {
+    setIsProductsHovered(false)
+  }
+
+  const shouldShowDropdown = isProductsDropdownOpen || isProductsHovered
 
   return (
     <>
@@ -111,44 +136,82 @@ const Sidebar = ({ isOpen, onClose }) => {
           <div className="p-3 sm:p-4">
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Main Menu</h3>
             <nav className="space-y-1">
-              {mainMenuItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  onClick={onClose}
-                  className={`flex items-center space-x-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl transition-all duration-200 ${
-                    isActivePath(item.path)
-                      ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-indigo-600"
-                  }`}
-                >
-                  <span className="text-base sm:text-lg">{item.icon}</span>
-                  <span className="font-medium text-sm sm:text-base">{item.name}</span>
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          {/* Categories */}
-          <div className="p-3 sm:p-4 border-t border-gray-100">
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Categories</h3>
-            <nav className="space-y-1">
-              {Array.isArray(categories) &&
-                categories.map((category) => (
+              {mainMenuItems.map((item) => {
+                if (item.name === "All Products" && item.hasDropdown) {
+                  return (
+                    <div 
+                      key={item.name} 
+                      className="relative"
+                      onMouseEnter={handleMouseEnterProducts}
+                      onMouseLeave={handleMouseLeaveProducts}
+                    >
+                      <button
+                        onClick={toggleProductsDropdown}
+                        className={`flex items-center justify-between w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl transition-all duration-200 ${
+                          isActivePath(item.path) || location.pathname.startsWith("/category/")
+                            ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg"
+                            : "text-gray-700 hover:bg-gray-100 hover:text-indigo-600"
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <span className="text-base sm:text-lg">{item.icon}</span>
+                          <span className="font-medium text-sm sm:text-base">{item.name}</span>
+                        </div>
+                        <svg
+                          className={`w-4 h-4 transition-transform duration-200 ${
+                            isProductsDropdownOpen ? "transform rotate-180" : ""
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      
+                      {/* Dropdown for flavours */}
+                      {shouldShowDropdown && (
+                        <div className="ml-4 mt-1 mb-2 border-l-2 border-indigo-100 pl-3 space-y-1">
+                          <div className="px-3 py-2">
+                            <p className="text-xs font-semibold text-indigo-500 italic">Flavours so good, they don't shout</p>
+                          </div>
+                          {flavours.map((flavour) => (
+                            <Link
+                              key={flavour.id}
+                              to={`/category/${flavour.id}`}
+                              onClick={onClose}
+                              className={`flex items-center space-x-3 px-3 py-2 rounded-xl transition-all duration-200 ${
+                                location.pathname === `/category/${flavour.id}`
+                                  ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg"
+                                  : "text-gray-700 hover:bg-gray-100 hover:text-indigo-600"
+                              }`}
+                            >
+                              <span className="text-sm">{flavour.icon}</span>
+                              <span className="font-medium text-xs sm:text-sm">{flavour.name}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
+                
+                return (
                   <Link
-                    key={category.id}
-                    to={`/category/${category.id}`}
+                    key={item.name}
+                    to={item.path}
                     onClick={onClose}
                     className={`flex items-center space-x-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl transition-all duration-200 ${
-                      location.pathname === `/category/${category.id}`
+                      isActivePath(item.path)
                         ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg"
                         : "text-gray-700 hover:bg-gray-100 hover:text-indigo-600"
                     }`}
                   >
-                    <span className="text-base sm:text-lg">{category.icon}</span>
-                    <span className="font-medium text-sm sm:text-base truncate">{category.name}</span>
+                    <span className="text-base sm:text-lg">{item.icon}</span>
+                    <span className="font-medium text-sm sm:text-base">{item.name}</span>
                   </Link>
-                ))}
+                )
+              })}
             </nav>
           </div>
 

@@ -9,6 +9,7 @@ const ProductForm = ({ product, onSubmit, onCancel }) => {
     imageURL: "",
     description: "",
     quantity: 0, // Added quantity field
+    stock: 0, // Stock field for inventory
     category: "snacks", // Added category field
     inStock: true,
   })
@@ -23,6 +24,7 @@ const ProductForm = ({ product, onSubmit, onCancel }) => {
         imageURL: product.imageURL || "",
         description: product.description || "",
         quantity: product.quantity || product.stock || 0, // Handle both quantity and stock
+        stock: product.stock || product.quantity || 0, // Explicitly set stock
         category: product.category || "snacks", // Added category
         inStock: product.inStock !== undefined ? product.inStock : true,
       })
@@ -83,6 +85,7 @@ const ProductForm = ({ product, onSubmit, onCancel }) => {
       ...formData,
       price: Number.parseFloat(formData.price),
       quantity: Number.parseInt(formData.quantity) || 0, // Parse quantity as integer
+      stock: Number.parseInt(formData.stock) || Number.parseInt(formData.quantity) || 0, // Set stock
       inStock: Number.parseInt(formData.quantity) > 0, // Auto-set inStock based on quantity
     }
 
@@ -96,6 +99,7 @@ const ProductForm = ({ product, onSubmit, onCancel }) => {
         imageURL: "",
         description: "",
         quantity: 0, // Reset quantity
+        stock: 0, // Reset stock
         category: "snacks", // Reset category
         inStock: true,
       })
@@ -114,6 +118,7 @@ const ProductForm = ({ product, onSubmit, onCancel }) => {
       imageURL: "",
       description: "",
       quantity: 0, // Reset quantity
+      stock: 0, // Reset stock
       category: "snacks", // Reset category
       inStock: true,
     })

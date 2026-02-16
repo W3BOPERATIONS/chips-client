@@ -6,10 +6,10 @@ const BackgroundCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
 
   const chipImages = [
-    "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=1200&h=800&fit=crop&crop=center&q=80", // Golden potato chips
-    "https://images.unsplash.com/photo-1613919113640-25732ec5e61f?w=1200&h=800&fit=crop&crop=center&q=80", // Colorful chips variety
-    "https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=1200&h=800&fit=crop&crop=center&q=80", // Tortilla chips with dips
-    "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=1200&h=800&fit=crop&crop=center&q=80", // Premium artisan chips
+    "/heros/hero1.jpg", // Golden potato chips
+    "/heros/hero2.jpg", // Colorful chips variety
+    "/heros/hero3.jpg", // Tortilla chips with dips
+    "/heros/hero4.jpg", // Premium artisan chips
   ]
 
   useEffect(() => {

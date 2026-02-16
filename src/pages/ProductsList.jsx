@@ -7,12 +7,15 @@ const ProductsList = ({ products, onEdit, onDelete, onUpdateQuantity }) => {
   const [sortBy, setSortBy] = useState("name")
   const [filterCategory, setFilterCategory] = useState("all")
 
-  // Get unique categories
-  const categories = [...new Set(products.map((product) => product.category))].filter(Boolean)
+  // Get unique categories excluding custom-hamper
+  const categories = [...new Set(products.map((product) => product.category))].filter(Boolean).filter(cat => cat !== "custom-hamper")
 
-  // Filter and sort products
+  // Filter and sort products - exclude custom hamper products from display
   const filteredProducts = products
     .filter((product) => {
+      // Exclude custom hamper products
+      if (product.category === "custom-hamper") return false
+      
       const matchesSearch =
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -104,10 +107,14 @@ const ProductsList = ({ products, onEdit, onDelete, onUpdateQuantity }) => {
               <div className="absolute top-2 right-2">
                 <span
                   className={`px-2 py-1 text-xs rounded-full ${
-                    (product.stock || 0) > 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                    (product.stock || 0) > 20
+                      ? "bg-green-100 text-green-800"
+                      : (product.stock || 0) > 0
+                        ? "bg-red-100 text-red-800 animate-pulse font-semibold"
+                        : "bg-red-100 text-red-800"
                   }`}
                 >
-                  {(product.stock || 0) > 0 ? "In Stock" : "Out of Stock"}
+                  {(product.stock || 0) > 20 ? "In Stock" : (product.stock || 0) > 0 ? "Low Stock" : "Out of Stock"}
                 </span>
               </div>
             </div>

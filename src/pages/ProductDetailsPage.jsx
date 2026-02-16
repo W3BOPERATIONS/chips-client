@@ -9,6 +9,7 @@ import { toast } from "react-toastify"
 import { buildApiUrl } from "../config/api"
 import StarRating from "../components/StarRating"
 import CustomizeHamperModal from "../components/CustomizeHamperModal"
+import { getProductImage } from "../utils/imageUtils"
 
 const ProductDetailsPage = () => {
   const { id } = useParams()
@@ -211,6 +212,25 @@ const ProductDetailsPage = () => {
       navigate("/login")
       return
     }
+
+    // Check if product is a hamper and if enough packets are available (10 packets per hamper)
+    const packetsNeeded = (product.packetsPerHamper || 10) * quantity
+    if (product.isHamper && (product.stock || 0) < packetsNeeded) {
+      const packetsAvailable = product.stock || 0
+      toast.error(
+        `Only ${packetsAvailable} packets available of this flavor. Each hamper needs ${product.packetsPerHamper || 10} packets. Please add other flavors or customize your hamper.`,
+        {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        },
+      )
+      return
+    }
+
     const qty = Math.min(product.stock || quantity, quantity)
     const directItems = [
       {
@@ -219,6 +239,7 @@ const ProductDetailsPage = () => {
         price: product.price,
         quantity: qty,
         imageURL: product.imageURL,
+        contents: product.contents || [],
       },
     ]
     navigate("/checkout", { state: { directItems, fromBuyNow: true } })
@@ -295,6 +316,7 @@ const ProductDetailsPage = () => {
         price: customProduct.price,
         quantity: 1,
         imageURL: customProduct.imageURL,
+        contents: contents,
       },
     ]
 
@@ -329,10 +351,11 @@ const ProductDetailsPage = () => {
       </div>
     )
 
-  const images = product.images && product.images.length > 0 ? product.images : [product.imageURL]
-  const discount = product.originalPrice
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-    : 0
+  const images = product.images && product.images.length > 0
+    ? product.images.map(img => getProductImage({ ...product, imageURL: img }, 'details'))
+    : [getProductImage(product, 'details')]
+
+  const discount = 10
 
   const isHamper = !!product.isHamper
   const packCount = product.packetsPerHamper || 10
@@ -431,11 +454,10 @@ const ProductDetailsPage = () => {
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300 transform hover:scale-105 ${
-                        selectedImage === index
-                          ? "border-orange-500 shadow-lg ring-2 ring-orange-200/50"
-                          : "border-gray-200 hover:border-gray-400"
-                      }`}
+                      className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300 transform hover:scale-105 ${selectedImage === index
+                        ? "border-orange-500 shadow-lg ring-2 ring-orange-200/50"
+                        : "border-gray-200 hover:border-gray-400"
+                        }`}
                     >
                       <img
                         src={image || "/placeholder.svg"}
@@ -490,26 +512,32 @@ const ProductDetailsPage = () => {
                   <p className="text-sm text-gray-600 font-medium">Free shipping on orders above ₹499</p>
                 </div>
 
-                <div className="flex items-center space-x-4 bg-gray-50 rounded-xl p-4">
-                  <span className="font-bold text-gray-800 text-base">Quantity:</span>
-                  <div className="flex items-center bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 transition-all duration-200 font-bold text-gray-700 text-base hover:scale-105"
-                    >
-                      −
-                    </button>
-                    <span className="px-4 py-2 font-black text-gray-900 text-base bg-white min-w-[60px] text-center">
-                      {quantity}
-                    </span>
-                    <button
-                      onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 transition-all duration-200 font-bold text-gray-700 text-base hover:scale-105"
-                    >
-                      +
-                    </button>
+                <div className="flex flex-col gap-3 bg-gray-50 rounded-xl p-4">
+                  <div className="flex items-center space-x-4">
+                    <span className="font-bold text-gray-800 text-base">Quantity:</span>
+                    <div className="flex items-center bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                      <button
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 transition-all duration-200 font-bold text-gray-700 text-base hover:scale-105"
+                      >
+                        −
+                      </button>
+                      <span className="px-4 py-2 font-black text-gray-900 text-base bg-white min-w-[60px] text-center">
+                        {quantity}
+                      </span>
+                      <button
+                        onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 transition-all duration-200 font-bold text-gray-700 text-base hover:scale-105"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
-                  <span className="text-gray-500 text-sm font-medium">Max: {product.stock} available</span>
+                  {product.stock < 20 && product.stock > 0 && (
+                    <div className="text-xs sm:text-sm text-red-600 font-semibold bg-red-50 px-3 py-2 rounded-lg">
+                      Hurry! Only {product.stock} packets of this flavor left in stock.
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
@@ -581,11 +609,10 @@ const ProductDetailsPage = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`py-2 px-3 rounded-xl font-bold text-sm transition-all duration-300 whitespace-nowrap ${
-                      activeTab === tab
-                        ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg transform scale-105"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-white hover:shadow-md"
-                    }`}
+                    className={`py-2 px-3 rounded-xl font-bold text-sm transition-all duration-300 whitespace-nowrap ${activeTab === tab
+                      ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg transform scale-105"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-white hover:shadow-md"
+                      }`}
                   >
                     {tab === "inside" ? "What's Inside" : tab.charAt(0).toUpperCase() + tab.slice(1)}
                     {tab === "reviews" && ` (${reviews.length})`}
@@ -773,11 +800,10 @@ const ProductDetailsPage = () => {
                                 key={star}
                                 type="button"
                                 onClick={() => setReviewForm({ ...reviewForm, rating: star })}
-                                className={`text-2xl transition-all duration-300 transform hover:scale-110 ${
-                                  star <= reviewForm.rating
-                                    ? "text-yellow-400 scale-105"
-                                    : "text-gray-300 hover:text-yellow-300"
-                                }`}
+                                className={`text-2xl transition-all duration-300 transform hover:scale-110 ${star <= reviewForm.rating
+                                  ? "text-yellow-400 scale-105"
+                                  : "text-gray-300 hover:text-yellow-300"
+                                  }`}
                               >
                                 ★
                               </button>

@@ -134,37 +134,66 @@ const CustomizeHamperModal = (props) => {
 
         {/* Flavors Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-auto pr-1">
-          {flavorList.map((flavor) => (
-            <div
-              key={flavor}
-              className="flex items-center justify-between bg-gray-50 rounded-xl border p-3 hover:shadow-sm transition-all duration-200"
-            >
-              <div className="font-medium text-gray-800">{flavor}</div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => decrease(flavor)}
-                  disabled={getQty(flavor) <= 0}
-                  className={`w-8 h-8 rounded-lg border font-bold ${
-                    getQty(flavor) <= 0 ? "text-gray-300 cursor-not-allowed" : "text-gray-600 hover:bg-gray-100"
-                  }`}
-                  aria-label={`Decrease ${flavor}`}
-                >
-                  −
-                </button>
-                <div className="w-10 text-center font-semibold text-gray-800">{getQty(flavor)}</div>
-                <button
-                  type="button"
-                  onClick={() => increase(flavor)}
-                  className="w-8 h-8 rounded-lg border hover:bg-gray-100 text-gray-600 font-bold"
-                  aria-label={`Increase ${flavor}`}
-                >
-                  +
-                </button>
+          {flavorList.map((flavor) => {
+            const flavorStock = product?.flavors?.find(f => f.name === flavor)?.stock || 100
+            const isLowStock = flavorStock < 20
+            return (
+              <div
+                key={flavor}
+                className={`flex items-center justify-between bg-gray-50 rounded-xl border p-3 hover:shadow-sm transition-all duration-200 ${
+                  isLowStock ? "border-red-300 bg-red-50" : ""
+                }`}
+              >
+                <div>
+                  <div className="font-medium text-gray-800">{flavor}</div>
+                  {isLowStock && flavorStock > 0 && (
+                    <div className="text-xs text-red-600 font-semibold mt-1">Only {flavorStock} left!</div>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => decrease(flavor)}
+                    disabled={getQty(flavor) <= 0}
+                    className={`w-8 h-8 rounded-lg border font-bold ${
+                      getQty(flavor) <= 0 ? "text-gray-300 cursor-not-allowed" : "text-gray-600 hover:bg-gray-100"
+                    }`}
+                    aria-label={`Decrease ${flavor}`}
+                  >
+                    −
+                  </button>
+                  <div className="w-10 text-center font-semibold text-gray-800">{getQty(flavor)}</div>
+                  <button
+                    type="button"
+                    onClick={() => increase(flavor)}
+                    className="w-8 h-8 rounded-lg border hover:bg-gray-100 text-gray-600 font-bold"
+                    aria-label={`Increase ${flavor}`}
+                  >
+                    +
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
+
+        {/* Summary of Selected Packets */}
+        {selectedTotal > 0 && (
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-4 mb-4">
+            <p className="text-sm font-semibold text-gray-800 mb-2">Your Selection:</p>
+            <div className="space-y-1">
+              {flavorList.map((flavor) => {
+                const qty = getQty(flavor)
+                return qty > 0 ? (
+                  <div key={flavor} className="text-sm text-gray-700 flex justify-between">
+                    <span>{flavor}:</span>
+                    <span className="font-semibold">{qty} packets</span>
+                  </div>
+                ) : null
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Footer */}
         <div className="flex items-center justify-between mt-5">

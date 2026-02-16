@@ -22,50 +22,82 @@ const HomePage = () => {
     {
       id: 1,
       rating: "★★★★★",
-      text: "The best chips I've ever tasted! The quality is outstanding and the flavors are incredible. My whole family is addicted!",
-      name: "Sarah Johnson",
-      initial: "S",
+      text: "The Desi Garlic flavour tastes just like my grandmother used to make. Authentic Indian spices with perfect crunch. Ordered twice this month!",
+      name: "Priya Sharma",
+      initial: "P",
       color: "from-indigo-500 to-purple-600"
     },
     {
       id: 2,
       rating: "★★★★★",
-      text: "Fast delivery and amazing packaging. The chips arrived fresh and crispy. Highly recommended! Will order again soon.",
-      name: "Mike Chen",
-      initial: "M",
+      text: "As someone who watches their diet, I love that these aren't deep-fried. Tomato Chatpata is my favourite tea-time snack now.",
+      name: "Arun Mehta",
+      initial: "A",
       color: "from-green-500 to-emerald-600"
     },
     {
       id: 3,
-      rating: "★★★★★",
-      text: "Love the variety of healthy options. Perfect for my fitness goals without compromising on taste! So glad I found this store.",
-      name: "Anna Rodriguez",
-      initial: "A",
+      rating: "★★★★☆",
+      text: "Good flavour and love the women empowerment mission. Would love to see more regional flavours like Lucknowi or Rajasthani spices.",
+      name: "Neha Kapoor",
+      initial: "N",
       color: "from-orange-500 to-red-600"
     },
     {
       id: 4,
       rating: "★★★★★",
-      text: "Absolutely delicious! The Desi Garlic flavor is my favorite. The perfect balance of spices and crunch. 10/10!",
-      name: "Raj Patel",
+      text: "Finally, low-oil chips that actually taste good! No greasy after-feel. My kids finish the Onion Tadka pack in one sitting.",
+      name: "Rohan Verma",
       initial: "R",
       color: "from-blue-500 to-cyan-600"
     },
     {
       id: 5,
       rating: "★★★★★",
-      text: "These chips are a game-changer! So much better than store-bought ones. The freshness and quality are unmatched.",
-      name: "Emily Wilson",
-      initial: "E",
+      text: "Finally, chips that taste like real Indian street food but made healthy. Perfect for monsoon evenings with tea.",
+      name: "Ananya Patel",
+      initial: "A",
       color: "from-pink-500 to-rose-600"
     },
     {
       id: 6,
       rating: "★★★★★",
-      text: "Customer service is exceptional and the chips are to die for! The Chilli Lemon flavor has the perfect kick. Love it!",
-      name: "David Brown",
-      initial: "D",
+      text: "Perfect balance of spice and salt. The Chilli Lemon has real lemon zest, not artificial flavouring. Absolutely delicious!",
+      name: "Vikram Singh",
+      initial: "V",
       color: "from-amber-500 to-yellow-600"
+    },
+    {
+      id: 7,
+      rating: "★★★★★",
+      text: "Ordered for our Holi party and everyone kept asking where I got these chips from. The Masala Mint is unique and refreshing!",
+      name: "Sunita Reddy",
+      initial: "S",
+      color: "from-teal-500 to-green-600"
+    },
+    {
+      id: 8,
+      rating: "★★★★☆",
+      text: "Great taste with less guilt. Perfect for evening snacks. Would love to see Chettinad or Goan flavours in the future.",
+      name: "Rajesh Iyer",
+      initial: "R",
+      color: "from-purple-500 to-indigo-600"
+    },
+    {
+      id: 9,
+      rating: "★★★★★",
+      text: "Knowing that my purchase supports rural women in India makes it special. And the chips are delicious too. What's not to love?",
+      name: "Meera Joshi",
+      initial: "M",
+      color: "from-red-500 to-pink-600"
+    },
+    {
+      id: 10,
+      rating: "★★★★★",
+      text: "As a nutritionist based in Delhi, I recommend these to clients. Real ingredients, transparent sourcing, and authentic Indian taste.",
+      name: "Dr. Karthik Nair",
+      initial: "K",
+      color: "from-blue-500 to-cyan-600"
     }
   ];
 
@@ -166,7 +198,7 @@ const HomePage = () => {
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
             <span className="font-semibold gradient-text bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
-              Chat with Crunchywavez
+              Chat with Crunchy Wavez
             </span>
           </div>
           <p className="text-xs text-slate-300 mt-1">We're here to help! 💬</p>
@@ -184,12 +216,11 @@ const HomePage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-20">
           <div className="floating-animation">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6">
-              Premium <span className="gradient-text">Chips</span> Store
+              Crunchy <span className="gradient-text">Wavez</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4">
-              Discover our collection of crispy, flavorful chips made from the
-              finest ingredients. Perfect for snacking, parties, or any time you
-              crave something delicious!
+              At Crunchy Wavez, we make slow roasted chips with real Indian flavours, 
+              less oil, big crunch, and a mission rooted in women empowerment.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
               <Link
@@ -202,7 +233,7 @@ const HomePage = () => {
                 to="/about"
                 className="btn-secondary text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4"
               >
-                Learn More
+                Write About Us
               </Link>
             </div>
           </div>
@@ -214,10 +245,10 @@ const HomePage = () => {
         <div className="mb-16 sm:mb-20">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text mb-4">
-              Shop by Category
+              Pick Your Flavour
             </h2>
             <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto">
-              Explore our diverse range of premium snacks
+              Flavours so good, they don't shout
             </p>
           </div>
 
@@ -269,7 +300,7 @@ const HomePage = () => {
         <div className="mb-12 sm:mb-16">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text mb-4">
-              Featured Products
+              Taste Collection
             </h2>
             <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto">
               Handcrafted with love, delivered with care
@@ -442,44 +473,43 @@ const HomePage = () => {
         {/* Features Section */}
         <div className="glass-effect rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 mt-12 sm:mt-20">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center gradient-text mb-8 sm:mb-12">
-            Why Choose ChipsStore?
+            Why Choose Crunchy Wavez?
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
             <div className="text-center group">
               <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg group-hover:shadow-2xl transform group-hover:scale-110 transition-all duration-300">
-                <span className="text-2xl sm:text-3xl">🥔</span>
+                <span className="text-2xl sm:text-3xl">🍃</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 sm:mb-4">
-                Premium Quality
+                Clean Crunch
               </h3>
               <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
-                Made from the finest potatoes and ingredients for the perfect
-                crunch.
+                Slow-roasted, not deep-fried. Less oil, honest ingredients, and crunch that feels light yet satisfying.
               </p>
             </div>
 
             <div className="text-center group">
               <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg group-hover:shadow-2xl transform group-hover:scale-110 transition-all duration-300">
-                <span className="text-2xl sm:text-3xl">🚚</span>
+                <span className="text-2xl sm:text-3xl">🌶️</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 sm:mb-4">
-                Fast Delivery
+                Flavours with Sense
               </h3>
               <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
-                Quick and reliable delivery to get your snacks to you fresh.
+                No overacting, no fake notes. Balanced Indian flavours crafted to stay on your palate, not overpower it.
               </p>
             </div>
 
             <div className="text-center group">
               <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg group-hover:shadow-2xl transform group-hover:scale-110 transition-all duration-300">
-                <span className="text-2xl sm:text-3xl">💯</span>
+                <span className="text-2xl sm:text-3xl">❤️</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 sm:mb-4">
-                100% Satisfaction
+                Purpose Beyond Snacks
               </h3>
               <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
-                We guarantee you'll love our chips or your money back.
+                Every pack supports rural women and ethical sourcing — because good food should do good too.
               </p>
             </div>
           </div>
@@ -487,30 +517,24 @@ const HomePage = () => {
 
         {/* Stats Section */}
         <div className="mt-16 sm:mt-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             <div className="text-center">
               <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">
-                50K+
+                10K
               </div>
               <p className="text-slate-600">Happy Customers</p>
             </div>
             <div className="text-center">
               <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">
-                25+
+                5
               </div>
-              <p className="text-slate-600">Chip Varieties</p>
+              <p className="text-slate-600">Authentic Indian Flavours</p>
             </div>
             <div className="text-center">
               <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">
-                99%
+                96%
               </div>
-              <p className="text-slate-600">Satisfaction Rate</p>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold gradient-text mb-2">
-                24/7
-              </div>
-              <p className="text-slate-600">Customer Support</p>
+              <p className="text-slate-600">Crunch Happiness</p>
             </div>
           </div>
         </div>

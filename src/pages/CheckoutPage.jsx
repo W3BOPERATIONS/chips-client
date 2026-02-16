@@ -9,6 +9,7 @@ import SuccessModal from "../components/SuccessModal"
 import PaymentModal from "../components/PaymentModal"
 import { toast } from "react-toastify"
 import { buildApiUrl } from "../config/api"
+import { getProductImage } from "../utils/imageUtils"
 
 const CheckoutPage = () => {
   const navigate = useNavigate()
@@ -25,6 +26,7 @@ const CheckoutPage = () => {
     email: user?.email || "", // this remains the delivery/invoice email input
     address: "",
     phone: "",
+    deliveryState: "",
     paymentMethod: "cod",
   })
 
@@ -36,6 +38,14 @@ const CheckoutPage = () => {
   const [orderData, setOrderData] = useState(null)
   const [completeOrderData, setCompleteOrderData] = useState(null)
   const [orderPlaced, setOrderPlaced] = useState(false)
+
+  // Calculate delivery charge based on state
+  const getDeliveryCharge = () => {
+    if (!formData.deliveryState) return 0
+    return formData.deliveryState.toLowerCase() === "gujarat" ? 60 : 100
+  }
+
+  const deliveryCharge = getDeliveryCharge()
 
   if (itemsForOrder.length === 0 && !orderPlaced) {
     navigate("/")
@@ -77,8 +87,12 @@ const CheckoutPage = () => {
 
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required"
-    } else if (!/^[\d\s\-$$$$+]{10,}$/.test(formData.phone.trim())) {
+    } else if (!/^[\d\s\-+]{10,}$/.test(formData.phone.trim())) {
       newErrors.phone = "Please enter a valid phone number"
+    }
+
+    if (!formData.deliveryState.trim()) {
+      newErrors.deliveryState = "Delivery state is required"
     }
 
     setErrors(newErrors)
@@ -90,7 +104,8 @@ const CheckoutPage = () => {
     if (!validateForm()) return
 
     const subtotal = isDirect ? directItems.reduce((t, it) => t + it.price * it.quantity, 0) : getTotalPrice()
-    const total = subtotal
+    const delivery = deliveryCharge
+    const total = subtotal + delivery
 
     const normalizedItems = itemsForOrder.map((item) => ({
       productId: item.productId || item._id,
@@ -98,6 +113,7 @@ const CheckoutPage = () => {
       price: item.price,
       quantity: item.quantity,
       imageURL: item.imageURL,
+      contents: item.contents || [],
     }))
 
     const orderDetails = {
@@ -106,17 +122,38 @@ const CheckoutPage = () => {
       userEmail: user?.email || formData.email.trim(),
       address: formData.address.trim(),
       phone: formData.phone.trim(),
+      deliveryState: formData.deliveryState.trim(),
       paymentMethod: formData.paymentMethod,
       items: normalizedItems,
       subtotal,
       tax: 0,
+      deliveryCharge: delivery,
       totalAmount: total,
       status: "pending",
     }
 
     setOrderData(orderDetails)
     if (formData.paymentMethod === "online") {
-      setShowPayment(true)
+      // For online payment, create the order first to get the ID
+      try {
+        setLoading(true)
+        const response = await axios.post(buildApiUrl("api/orders"), orderDetails)
+        const createdOrder = response.data
+
+        // Update orderData with the real ID
+        setOrderData({
+          ...orderDetails,
+          orderId: createdOrder.orderId || createdOrder._id,
+          _id: createdOrder._id
+        })
+
+        setShowPayment(true)
+      } catch (error) {
+        console.error("Failed to create pending order:", error)
+        toast.error("Failed to initialize order. Please try again.")
+      } finally {
+        setLoading(false)
+      }
     } else {
       await processOrder(orderDetails)
     }
@@ -203,6 +240,17 @@ const CheckoutPage = () => {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 page-transition">
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-8 sm:p-12 shadow-2xl text-center">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4"></div>
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">Processing Order</h2>
+            <p className="text-slate-600 text-sm sm:text-base">Please wait while we confirm your order...</p>
+          </div>
+        </div>
+      )}
+
       <h1 className="text-3xl sm:text-4xl font-bold gradient-text mb-8 sm:mb-12 text-center">Checkout</h1>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12">
@@ -221,9 +269,8 @@ const CheckoutPage = () => {
                 name="customerName"
                 value={formData.customerName}
                 onChange={handleInputChange}
-                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ${
-                  errors.customerName ? "border-red-500 ring-red-500/20" : ""
-                }`}
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ${errors.customerName ? "border-red-500 ring-red-500/20" : ""
+                  }`}
                 placeholder="Enter your full name"
               />
               {errors.customerName && (
@@ -244,9 +291,8 @@ const CheckoutPage = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ${
-                  errors.email ? "border-red-500 ring-red-500/20" : ""
-                }`}
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ${errors.email ? "border-red-500 ring-red-500/20" : ""
+                  }`}
                 placeholder="Enter your email address"
               />
               {errors.email && (
@@ -267,9 +313,8 @@ const CheckoutPage = () => {
                 value={formData.address}
                 onChange={handleInputChange}
                 rows={4}
-                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ${
-                  errors.address ? "border-red-500 ring-red-500/20" : ""
-                }`}
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ${errors.address ? "border-red-500 ring-red-500/20" : ""
+                  }`}
                 placeholder="Enter your complete delivery address"
               />
               {errors.address && (
@@ -290,15 +335,39 @@ const CheckoutPage = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ${
-                  errors.phone ? "border-red-500 ring-red-500/20" : ""
-                }`}
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ${errors.phone ? "border-red-500 ring-red-500/20" : ""
+                  }`}
                 placeholder="Enter your phone number"
               />
               {errors.phone && (
                 <p className="text-red-500 text-sm mt-2 flex items-center space-x-1">
                   <span>⚠️</span>
                   <span>{errors.phone}</span>
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="deliveryState" className="block text-sm font-semibold text-slate-700 mb-2 sm:mb-3">
+                Delivery State *
+              </label>
+              <input
+                type="text"
+                id="deliveryState"
+                name="deliveryState"
+                value={formData.deliveryState}
+                onChange={handleInputChange}
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ${errors.deliveryState ? "border-red-500 ring-red-500/20" : ""
+                  }`}
+                placeholder="Enter your state (e.g., Gujarat, Maharashtra)"
+              />
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                Delivery charge: ₹{getDeliveryCharge()} (Gujarat: ₹60, Others: ₹100)
+              </p>
+              {errors.deliveryState && (
+                <p className="text-red-500 text-sm mt-2 flex items-center space-x-1">
+                  <span>⚠️</span>
+                  <span>{errors.deliveryState}</span>
                 </p>
               )}
             </div>
@@ -352,8 +421,8 @@ const CheckoutPage = () => {
               </h3>
               <ul className="text-xs sm:text-sm text-slate-600 space-y-1 sm:space-y-2">
                 <li className="flex items-center space-x-2">
-                  <span>✅</span>
-                  <span>Free delivery on all orders</span>
+                  <span>💰</span>
+                  <span>Delivery charge: ₹{getDeliveryCharge()} (Gujarat: ₹60, Others: ₹100)</span>
                 </li>
                 <li className="flex items-center space-x-2">
                   <span>⏰</span>
@@ -405,13 +474,23 @@ const CheckoutPage = () => {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <img
-                  src={item.imageURL || "/placeholder.svg"}
+                  src={getProductImage(item)}
                   alt={item.name}
                   className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-xl sm:rounded-2xl shadow-md"
                 />
                 <div className="flex-grow min-w-0">
                   <h4 className="font-bold text-slate-800 text-sm sm:text-base truncate">{item.name}</h4>
                   <p className="text-xs sm:text-sm text-slate-600">Qty: {item.quantity}</p>
+                  {item.contents && item.contents.length > 0 && (
+                    <div className="mt-2 text-xs text-slate-500 space-y-1">
+                      <p className="font-semibold">Contents:</p>
+                      {item.contents.map((content, idx) => (
+                        <p key={idx} className="ml-2">
+                          • {content.flavor}: {content.count} packets
+                        </p>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <p className="font-bold text-slate-800 text-base sm:text-lg">
                   ₹{(item.price * item.quantity).toFixed(2)}
@@ -424,18 +503,20 @@ const CheckoutPage = () => {
           <div className="border-t border-slate-200 pt-4 sm:pt-6 space-y-3 sm:space-y-4">
             <div className="flex justify-between text-slate-600 text-sm sm:text-base">
               <span>Subtotal</span>
-              <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
+              <span className="font-semibold">₹{(isDirect ? directItems.reduce((t, it) => t + it.price * it.quantity, 0) : getTotalPrice()).toFixed(2)}</span>
             </div>
 
             <div className="flex justify-between text-slate-600 text-sm sm:text-base">
-              <span>Delivery</span>
-              <span className="text-green-600 font-semibold">Free</span>
+              <span>Delivery Charge</span>
+              <span className={`font-semibold ${deliveryCharge > 0 ? "text-orange-600" : "text-green-600"}`}>
+                {deliveryCharge > 0 ? `₹${deliveryCharge}` : "Free"}
+              </span>
             </div>
 
             <div className="border-t border-slate-200 pt-3 sm:pt-4">
               <div className="flex justify-between text-xl sm:text-2xl font-bold gradient-text">
                 <span>Total</span>
-                <span>₹{total.toFixed(2)}</span>
+                <span>₹{((isDirect ? directItems.reduce((t, it) => t + it.price * it.quantity, 0) : getTotalPrice()) + deliveryCharge).toFixed(2)}</span>
               </div>
             </div>
           </div>

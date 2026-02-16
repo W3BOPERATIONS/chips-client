@@ -29,6 +29,11 @@ import WishlistSignInPage from "./pages/WishlistSignInPage"
 import ForgotPasswordPage from "./pages/ForgotPasswordPage"
 import VerifyOtpPage from "./pages/VerifyOtpPage"
 import ResetPasswordPage from "./pages/ResetPasswordPage"
+import PaymentStatusPage from "./pages/PaymentStatusPage"
+// NEW IMPORTS
+import TermsConditionPage from "./pages/TermsConditionPage"
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage"
+import RefundPolicyPage from "./pages/RefundPolicyPage"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import "./index.css"
@@ -76,6 +81,12 @@ function App() {
                   <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                   <Route path="/verify-otp" element={<VerifyOtpPage />} />
                   <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+                  {/* NEW ROUTES - YEH ADD KIYE HAI */}
+                  <Route path="/terms" element={<TermsConditionPage />} />
+                  <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                  <Route path="/refund" element={<RefundPolicyPage />} />
+                  <Route path="/payment-success" element={<PaymentStatusPage />} />
                 </Routes>
               </main>
               <Footer />

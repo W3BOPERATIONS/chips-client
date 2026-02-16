@@ -115,7 +115,8 @@ const ProductsPage = () => {
         </p>
       </div>
 
-      {/* Search and Filters */}
+      {/* Search and Filters - Commented Out */}
+      {/* 
       <div className="glass-effect rounded-3xl p-8 mb-12">
         <form onSubmit={handleSearch} className="mb-6">
           <div className="flex flex-col md:flex-row gap-4">
@@ -194,6 +195,7 @@ const ProductsPage = () => {
           </div>
         </div>
       </div>
+      */}
 
       {/* Products Grid */}
       {filteredProducts.length === 0 ? (
@@ -219,16 +221,6 @@ const ProductsPage = () => {
         </div>
       ) : (
         <>
-          <div className="flex justify-between items-center mb-8">
-            <p className="text-slate-600 text-lg">
-              Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of{" "}
-              {filteredProducts.length} products
-            </p>
-            <p className="text-slate-600 text-lg">
-              Page {currentPage} of {totalPages}
-            </p>
-          </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto auto-rows-fr items-stretch">
             {currentProducts.map((product, index) => (
               <div
@@ -241,61 +233,64 @@ const ProductsPage = () => {
             ))}
           </div>
 
+          {/* Pagination Controls Only - Removed Showing Products/Page Info */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center mt-12 space-x-2">
-              <button
-                onClick={handlePrevPage}
-                disabled={currentPage === 1}
-                className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                <span>Previous</span>
-              </button>
+            <div className="mt-12 pt-8 border-t border-gray-200">
+              <div className="flex justify-center items-center space-x-2">
+                <button
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  <span>Previous</span>
+                </button>
 
-              <div className="flex space-x-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => {
-                  // Show first page, last page, current page, and pages around current page
-                  if (
-                    pageNumber === 1 ||
-                    pageNumber === totalPages ||
-                    (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
-                  ) {
-                    return (
-                      <button
-                        key={pageNumber}
-                        onClick={() => handlePageChange(pageNumber)}
-                        className={`px-4 py-2 rounded-lg transition-colors ${
-                          currentPage === pageNumber
-                            ? "bg-indigo-600 text-white"
-                            : "bg-white border border-gray-300 hover:bg-gray-50"
-                        }`}
-                      >
-                        {pageNumber}
-                      </button>
-                    )
-                  } else if (pageNumber === currentPage - 2 || pageNumber === currentPage + 2) {
-                    return (
-                      <span key={pageNumber} className="px-2 py-2 text-gray-500">
-                        ...
-                      </span>
-                    )
-                  }
-                  return null
-                })}
+                <div className="flex space-x-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => {
+                    // Show first page, last page, current page, and pages around current page
+                    if (
+                      pageNumber === 1 ||
+                      pageNumber === totalPages ||
+                      (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+                    ) {
+                      return (
+                        <button
+                          key={pageNumber}
+                          onClick={() => handlePageChange(pageNumber)}
+                          className={`px-4 py-2 rounded-lg transition-colors ${
+                            currentPage === pageNumber
+                              ? "bg-indigo-600 text-white"
+                              : "bg-white border border-gray-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          {pageNumber}
+                        </button>
+                      )
+                    } else if (pageNumber === currentPage - 2 || pageNumber === currentPage + 2) {
+                      return (
+                        <span key={pageNumber} className="px-2 py-2 text-gray-500">
+                          ...
+                        </span>
+                      )
+                    }
+                    return null
+                  })}
+                </div>
+
+                <button
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+                >
+                  <span>Next</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
-
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
-              >
-                <span>Next</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
             </div>
           )}
         </>

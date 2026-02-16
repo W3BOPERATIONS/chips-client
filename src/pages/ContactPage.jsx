@@ -180,42 +180,42 @@ const ContactPage = () => {
     {
       question: "What makes Crunchy Wavez different?",
       answer:
-        "Our chips are sun-dried and roasted, not fried, crafted in small batches with authentic Indian seasonings for a light, healthy crunch.",
+        "Our chips are sun-dried and slow-roasted, not deep-fried, crafted in small batches with authentic Indian seasonings for a light, healthy crunch.",
     },
     {
       question: "Are these chips healthy?",
       answer:
-        "Yes! Low in oil, preservative-free, and naturally flavorful, they're a guilt-free snack for modern lifestyles.",
+        "Yes! Made with less oil, preservative-free, and naturally flavorful, they're a guilt-free snack for modern lifestyles.",
     },
     {
       question: "Who makes the chips?",
       answer:
-        "Skilled rural women craft every batch, blending tradition with purpose and creating sustainable livelihoods.",
+        "Skilled rural women craft every batch, blending tradition with purpose and creating sustainable livelihoods through women empowerment.",
     },
     {
       question: "What ingredients are used?",
       answer:
-        "We use 100% real potatoes, natural spices, and minimal oil — nothing artificial.",
+        "We use 100% real potatoes, authentic Indian spices, and minimal oil — nothing artificial or overpowering.",
     },
     {
       question: "Suitable for all ages?",
       answer:
-        "Absolutely. Kids, adults, everyone can enjoy a wholesome, crunchy snack.",
+        "Absolutely. Kids, adults, everyone can enjoy a wholesome, crunchy snack with balanced Indian flavours.",
     },
     {
       question: "How should I store them?",
       answer:
-        "Keep in a cool, dry place and reseal after opening to maintain freshness.",
+        "Keep in a cool, dry place and reseal after opening to maintain the big crunch and freshness.",
     },
     {
       question: "Can I place bulk or custom orders?",
       answer:
-        "Yes! We offer bulk orders and custom packaging for events or gifting.",
+        "Yes! We offer bulk orders and custom packaging for events, corporate gifting, or special occasions.",
     },
     {
       question: "Are your practices sustainable?",
       answer:
-        "Absolutely. From artisan production to women-led empowerment, we focus on ethical, responsible snacking.",
+        "Absolutely. From ethical sourcing to women-led production, we focus on responsible snacking that empowers communities.",
     },
   ];
 
@@ -243,9 +243,9 @@ const ContactPage = () => {
               className="text-xl md:text-2xl leading-relaxed mb-8 max-w-4xl mx-auto text-gray-100 drop-shadow-lg"
               variants={fadeInUp}
             >
-              Have a question, suggestion, or just want to say hello? We'd love
-              to hear from you. Our friendly team is here to help make your
-              snacking experience amazing.
+              Have a question about our slow-roasted chips, women empowerment mission, 
+              or just want to say hello? We'd love to hear from you. Our team is here 
+              to make your snacking experience thoughtful and delicious.
             </motion.p>
           </AnimatedSection>
         </div>
@@ -264,10 +264,10 @@ const ContactPage = () => {
         <div className="w-full max-w-6xl mx-auto px-4">
           <motion.div className="text-center mb-16" variants={fadeInUp}>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Crunchywavez
+              Crunchy Wavez
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Multiple ways to connect with our team. We're always here to help!
+              Flavours you'll love, snacks you can trust, made thoughtfully with purpose and care.
             </p>
           </motion.div>
 
@@ -423,6 +423,8 @@ const ContactPage = () => {
                       <option value="order">Order Support</option>
                       <option value="product">Product Question</option>
                       <option value="partnership">Partnership</option>
+                      <option value="women-empowerment">Women Empowerment</option>
+                      <option value="bulk-order">Bulk Order</option>
                       <option value="feedback">Feedback</option>
                       <option value="other">Other</option>
                     </select>
@@ -444,7 +446,7 @@ const ContactPage = () => {
                     value={formData.message}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300 resize-none"
-                    placeholder="Tell us how we can help you..."
+                    placeholder="Tell us about your inquiry regarding our slow-roasted chips, women empowerment mission, or anything else..."
                   />
                 </motion.div>
 
@@ -491,7 +493,7 @@ const ContactPage = () => {
               <AnimatedSection className="bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-gray-100">
                 <div className="w-full h-80">
                   <iframe
-                    title="Crunchywavez Location"
+                    title="Crunchy Wavez Location"
                     src="https://www.google.com/maps?q=SF-228%20Samanvay%20Symphony,%20Vaikunth%20Crossing,%20Waghodia%20Main%20Road,%20Ankhol,%20Vadodara,%20Gujarat,%20India,%20390019&z=16&output=embed"
                     width="100%"
                     height="100%"
@@ -568,20 +570,24 @@ const ContactPage = () => {
                 <div className="space-y-4">
                   {[
                     {
+                      label: "All Flavours Collection",
+                      href: "/products",
+                    },
+                    {
+                      label: "Women Empowerment Mission",
+                      href: "/about#mission",
+                    },
+                    {
+                      label: "Bulk & Corporate Orders",
+                      href: "/bulk-orders",
+                    },
+                    {
+                      label: "Our Craft Philosophy",
+                      href: "/about#craft",
+                    },
+                    {
                       label: "Track Your Order",
                       href: "/track-order",
-                    },
-                    {
-                      label: "Returns & Refunds",
-                      href: "/returns",
-                    },
-                    {
-                      label: "Shipping Information",
-                      href: "/shipping",
-                    },
-                    {
-                      label: "Bulk Orders",
-                      href: "/bulk-orders",
                     },
                   ].map((link, index) => (
                     <motion.div
@@ -623,8 +629,7 @@ const ContactPage = () => {
               Frequently Asked Questions
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Quick answers to common questions. Can't find what you're looking
-              for? Contact us directly.
+              Quick answers about our slow-roasted chips, women empowerment mission, and more.
             </p>
           </motion.div>
 
@@ -689,7 +694,7 @@ const ContactPage = () => {
           <AnimatedSection className="text-center mt-16">
             <motion.div variants={fadeInUp}>
               <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                Want to know more about us?
+                Want to know more about our story?
               </h3>
               <motion.div
                 whileHover={{ scale: 1.05 }}
