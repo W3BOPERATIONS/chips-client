@@ -56,7 +56,7 @@ function App() {
           <ScrollToTop />
           <div className="min-h-screen bg-gray-50 flex">
             <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
-            <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarOpen ? "lg:ml-80" : "lg:ml-0"}`}>
+            <div className={`flex-1 flex flex-col w-full max-w-full overflow-x-hidden transition-all duration-300 ${sidebarOpen ? "lg:ml-80" : "lg:ml-0"}`}>
               <Header onToggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
               <main className="flex-grow">
                 <Routes>

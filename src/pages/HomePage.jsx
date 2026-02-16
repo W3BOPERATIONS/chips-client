@@ -103,7 +103,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchProducts();
-    
+
     // Auto-rotate testimonials
     testimonialIntervalRef.current = setInterval(() => {
       setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
@@ -171,7 +171,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className="page-transition">
+    <div className="page-transition w-full overflow-x-hidden relative">
       {/* WhatsApp Floating Button */}
       <button
         onClick={handleWhatsAppClick}
@@ -219,7 +219,7 @@ const HomePage = () => {
               Crunchy <span className="gradient-text">Wavez</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4">
-              At Crunchy Wavez, we make slow roasted chips with real Indian flavours, 
+              At Crunchy Wavez, we make slow roasted chips with real Indian flavours,
               less oil, big crunch, and a mission rooted in women empowerment.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
@@ -370,8 +370,8 @@ const HomePage = () => {
 
           {/* Testimonial Carousel */}
           <div className="relative max-w-4xl mx-auto">
-            <div className="overflow-hidden rounded-2xl sm:rounded-3xl">
-              <div 
+            <div className="overflow-hidden rounded-2xl sm:rounded-3xl w-full">
+              <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
               >
@@ -412,11 +412,10 @@ const HomePage = () => {
                 <button
                   key={index}
                   onClick={() => goToTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial
-                      ? "bg-indigo-600 scale-125"
-                      : "bg-slate-300 hover:bg-slate-400"
-                  }`}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentTestimonial
+                    ? "bg-indigo-600 scale-125"
+                    : "bg-slate-300 hover:bg-slate-400"
+                    }`}
                   aria-label={`Go to testimonial ${index + 1}`}
                 />
               ))}

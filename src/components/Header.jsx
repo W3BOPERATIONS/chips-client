@@ -158,11 +158,10 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
                 </button>
 
                 <div
-                  className={`absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 transition-all duration-200 ${
-                    showUserMenu
+                  className={`absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 transition-all duration-200 ${showUserMenu
                       ? "opacity-100 visible"
                       : "opacity-0 invisible group-hover:opacity-100 group-hover:visible"
-                  }`}
+                    }`}
                 >
                   <Link
                     to="/profile"
@@ -199,21 +198,40 @@ const Header = ({ onToggleSidebar, sidebarOpen }) => {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200 shadow-sm">
+              <>
+                {/* Mobile Auth Button (Icon Only) */}
                 <Link
                   to="/login"
-                  className="text-gray-600 hover:text-indigo-600 font-medium transition-colors px-4 py-2.5 rounded-l-lg hover:bg-gray-50 text-sm"
+                  className="md:hidden p-2 text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors"
+                  aria-label="Sign In"
                 >
-                  Sign In
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
                 </Link>
-                <div className="w-px h-5 bg-gray-300"></div>
-                <Link
-                  to="/register"
-                  className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2.5 rounded-r-lg font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm"
-                >
-                  Sign Up
-                </Link>
-              </div>
+
+                {/* Desktop Auth Buttons */}
+                <div className="hidden md:flex items-center bg-white/80 backdrop-blur-sm rounded-lg border border-gray-200 shadow-sm">
+                  <Link
+                    to="/login"
+                    className="text-gray-600 hover:text-indigo-600 font-medium transition-colors px-4 py-2.5 rounded-l-lg hover:bg-gray-50 text-sm"
+                  >
+                    Sign In
+                  </Link>
+                  <div className="w-px h-5 bg-gray-300"></div>
+                  <Link
+                    to="/register"
+                    className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2.5 rounded-r-lg font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              </>
             )}
 
             {/* Cart Button */}
